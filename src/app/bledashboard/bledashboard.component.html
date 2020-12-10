@@ -1,0 +1,29 @@
+<p>Device Dashboard</p>
+
+<div>
+    <div class="card-container">
+        <!-- <a class="card" routerLink="view-devices" routerLinkActive="active">View Devices</a> -->
+        <button class="card" (click)="getAllAvailableDevices()">
+          <span>Refersh Devices</span>
+        </button>
+    
+      </div>
+    <table class="simple clickable">
+        <thead>
+            <tr>
+                <th class="accent-fg">Device Name</th>
+                <th class="accent-fg">UUID</th>
+                <th class="accent-fg">Status</th>
+                <!-- <th class="text-right accent-fg">Qty to Order</th> -->
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let device of allDevices">
+                <td style="width: 50%">{{device.device_name}}</td>
+                <td style="width: 50%">{{device.device_UUID}}</td>
+                <td style="width: 50%">{{getDeviceStatus(device)}}</td>
+                <!-- <td class="text-right">{{item.qty_to_order}}</td> -->
+            </tr>
+        </tbody>
+    </table>
+</div>
