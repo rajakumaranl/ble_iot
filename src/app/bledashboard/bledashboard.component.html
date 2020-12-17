@@ -2,13 +2,78 @@
 
 <div>
     <div class="card-container">
-        <!-- <a class="card" routerLink="view-devices" routerLinkActive="active">View Devices</a> -->
-        <button class="card" (click)="getAllAvailableDevices()">
-          <span>Refersh Devices</span>
-        </button>
-    
+      
+      <div class="row">
+          <div class="col-md-4">
+            <button class="card" (click)="getAllAvailableDevices()">
+                <span>Refersh Devices</span>
+              </button>
+          </div>
+          <div class="col-md-4">
+            <button class="card" (click)="addDevices()">
+                <span>Add devices</span>
+              </button>
+          </div>
+          <div class="col-md-4">
+            <button class="card" (click)="gotoUserStatus()">
+                <span><b>View Map</b></span>
+              </button>
+          </div>
       </div>
-    <table class="simple clickable">
+    </div>
+    <div id="content"></div>
+    <!-- <div id="addDevice" >					
+    <form id="addDeviceForm">					
+        <table>
+        <thead><tr><td><h3>Add a new Beacon</h3></td></tr></thead>
+        <tbody>
+        <tr><td>Device Name </td><td><input type="text" name="device_name" id="device_name"></td></tr>
+        <tr><td>Device UUID </td><td><input type="text" name="device_name" id="device_uuid"></td></tr>
+        <tr><td>Device Location </td><td><input type="text" name="device_name" id="device_location"></td></tr>
+        <tr><td>Description</td><td><input type="text" name="device_name" id="device_description"></td></tr>
+        <tr><td><input type="button" class="button" value="Add" onclick=formSubmit()></td> <td><input type="reset" class="button" value="Cancel" onclick=hideForm()></td></tr>
+        </tbody>
+        </table>
+    </form>
+    </div> -->
+    <div class="col-md-6 user-container" *ngIf='showAddDevice'>
+        <h2 class="text-center">Edit User</h2>
+        <form role="form" [formGroup]="editForm" (submit)="onSubmit()" #f="ngForm" >
+          <div class="form-group">
+            <label for="deviceName">Device Name</label>
+            <input type="text" formControlName="device_name" placeholder="Device Name" name="device_name" class="form-control" id="username">
+          </div>
+      
+          <div class="form-group">
+            <label for="uuid">UUID</label>
+            <input formControlName="uuid" placeholder="UUID" name="uuid" class="form-control" id="firstName">
+          </div>
+      
+          <div class="form-group">
+            <label for="device_address">Device MAC Address</label>
+            <input formControlName="device_address" placeholder="Device MAC Address" name="device_address" class="form-control" id="device_address">
+          </div>
+      
+          <div class="form-group">
+            <label for="location">Location</label>
+            <input formControlName="location" placeholder="Location" name="location" class="form-control" id="lastName">
+          </div>
+
+          <div class="form-group">
+            <label for="xcoordinate">X Co-ordinate</label>
+            <input formControlName="xcoordinate" placeholder="X Co-ordinate" name="xcoordinate" class="form-control" id="xcoordinate">
+          </div>
+
+          <div class="form-group">
+            <label for="ycoordinate">Y Co-ordinate</label>
+            <input formControlName="ycoordinate" placeholder="Y Co-ordinate" name="ycoordinate" class="form-control" id="ycoordinate">
+          </div>
+      
+          <button class="btn btn-success">Save</button>
+        </form>
+      </div>
+
+    <table mat-table class="simple clickable">
         <thead>
             <tr>
                 <th class="accent-fg">Device Name</th>

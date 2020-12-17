@@ -12,11 +12,10 @@ const httpOption = {
     providedIn: 'root',
 }
 )
-export class BLEDasboardService
+export class ViewMapService
 {
 
-    private devicesUrl = baseAPI +'/available-devices';
-    private add_device_url = baseAPI+'/add-device';
+    private devicesUrl = baseAPI +'/device-position';
     
     constructor(private http: HttpClient) {}
 
@@ -24,7 +23,7 @@ export class BLEDasboardService
         return throwError(err.error.message);
     }
 
-    getDevices() {
+    getPosition() {
         return this.http
             .get(this.devicesUrl)
             .pipe(
@@ -32,18 +31,18 @@ export class BLEDasboardService
                     return data;
                 })
             )
-            .pipe(catchError(error => BLEDasboardService._handleError(error)));
+            .pipe(catchError(error => ViewMapService._handleError(error)));
     }
 
     addDevice(params: any): Observable<any> {
         
         return this.http
-        .post(this.add_device_url, {params})
+        .post(this.devicesUrl, {params})
         .pipe(
             map((data: any[]) => {
                 return data;
             })
         )
-        .pipe(catchError(error => BLEDasboardService._handleError(error)));
+        .pipe(catchError(error => ViewMapService._handleError(error)));
     }
 }

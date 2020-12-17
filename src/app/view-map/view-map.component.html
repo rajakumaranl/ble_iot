@@ -1,0 +1,36 @@
+<p>view-map works!</p>
+
+<div id="wrapper" class="center">
+    <h1>Real Time Indoor GPS monitoring using BLE Devices</h1>
+    <h4>Demo For IoT</h4>
+
+    <div class="card-container">
+      
+        <div class="row">
+            <div class="col-md-4">
+              <button class="card" (click)="goBack()">
+                  <span>Home</span>
+                </button>
+            </div>
+            <div class="col-md-4">
+              <button class="card" (click)="checkUserPosition()">
+                  <span>Check Position</span>
+                </button>
+            </div>
+            <div class="col-md-4">
+              
+            </div>
+        </div>
+    </div>
+
+    <div class="root" class="center" style="position: relative;">
+        
+        <!-- <img #manimg src="assets/images/man.png"> -->
+        
+        <canvas #myCanvas width="1000" height="600">
+    
+        </canvas>
+        <canvas #manCanvas width="1000" height="600"
+            style="position: absolute; top: 0; z-index: 1;"></canvas>
+    </div>
+</div>

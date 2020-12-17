@@ -6,17 +6,23 @@ import { AppComponent } from './app.component';
 import { BLEDashboardComponent } from './bledashboard/bledashboard.component';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
+import { ViewMapComponent } from './view-map/view-map.component';
+// Import forms module
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
-    BLEDashboardComponent
+    BLEDashboardComponent,
+    ViewMapComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     RouterModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

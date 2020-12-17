@@ -153,73 +153,116 @@ client.on('message', (topic, message) => {
 function handleDeviceConnected (message) {
   console.log('device connected status %s', message)
   let receviceData = JSON.parse(message);
-
+  var uuid =   receviceData.device_UUID;
+  var time =  moment(receviceData.location_Time).format('YYYY-MM-DD');
   console.log("received device UUID : ",receviceData.device_UUID);
-  const con = mysql.createConnection({
+  const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: 'abcd',
     database: 'iot',
   });
 
-  var uuid =   receviceData.device_UUID;;
-  con.connect((err) => {
+  connection.connect((err) => {
     if(err){
       console.log('Error connecting to Db ========> ', err);
       return;
     }
-    console.log('Connection established to udate devices status');
-    con.query("UPDATE device SET status = 1 WHERE device_UUID = '"+ uuid+"'", function (err, result) {
-      if (err)
-        throw err;
-      allDevices = result;
-      console.log("Result: " + result);
+    console.log('Connection established');
+    connection.query('SELECT * from iot.device;', function (err, result) {
+      if (err) throw err;
+      console.log("Result for list of devices : " + result);
     });
+
+  
+    var qur = 'SELECT * from iot.device WHERE iot.device.device_UUID = "'+uuid+'";';
+    console.log('Connection established to fetch devices : ',qur);
+    connection.query(qur, [true], (error, results) => {
+      if (error) {
+        return console.error(error.message);
+      }
+      var device = results[0];
+      var xcoordinate = device.xcoordinate;
+      var ycoordinate = device.ycoordinate;
+      var location = device.device_Location;
+      let deviceId = device.device_id;
+
+      var insertQuery ='INSERT INTO iot.userpresence (user_id,device_id,Created_By,Created_Date,End_Date,xcoordinate,ycoordinate,userlocation) '
+                    +'values (1,'+deviceId+', 1 ,"' +time+'", "'+ time+'", '+ xcoordinate+', '+ ycoordinate+', "'+ location+'")';
+      console.log('Connection established to fetch devices : ',insertQuery);
+      connection.query(insertQuery, function (err, result) {
+        if (err) throw err;
+      });
+    });
+  
+    connection.query("UPDATE device SET status = 1 WHERE device_UUID = '"+ uuid+"'", function (err, result, fields) {
+      if (err) throw err;
+      console.log("Update device status Result: " + result);
+    });
+    // connection.end((err));
   });
+
+  
+  // // var insertResults = await pool.query('INSERT INTO public.brand(name,created_by,status) VALUES (trim($1), $2, $3)',['1',uuid, 'Admin', currentDateTime, currentDateTime, xcoordinate, ycoordinate, location]);
+  // const con1 = mysql.createConnection({
+  //   host: 'localhost',
+  //   user: 'root',
+  //   password: 'abcd',
+  //   database: 'iot',
+  // });
+
+  // con1.connect(function(err) {
+  //   if (err) throw err;
+  //   con1.query(insertQuery,['1',uuid, 'Admin', currentDateTime, currentDateTime, xcoordinate, ycoordinate, location], function (err, result, fields) {
+  //     if (err) throw err;
+  //     console.log("Insert ",result);
+  //   });
+  // });
+  // con1.end();
+  // const con2 = mysql.createConnection({
+  //   host: 'localhost',
+  //   user: 'root',
+  //   password: 'abcd',
+  //   database: 'iot',
+  // });
+
+  // con2.connect(function(err) {
+  //   if (err) throw err;
+
+  //   con2.query("UPDATE device SET status = 1 WHERE device_UUID = '"+ uuid+"'", function (err, result, fields) {
+  //     if (err) throw err;
+  //     console.log("Update device status Result: " + result);
+  //   });
+  // });
+  
+  // con2.end();
+
   connected = (message.toString() === 'true')
 }
-function saveTotalPurchase(request){
+
+function updatePresence(){
   return new Promise(async function(resolve) {
-  const pool = con.createConnection();
-  var result = await pool.query('SELECT * from devices;')
-  // var result = await pool.query('INSERT INTO precence(supplier_code, telephone_no, po_no, bill_discount, invoice_no, invoice_amount, net_amount, status, po_date, invoice_date, brand, created_by, changed_by, final_invoice_amount ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING *;', [request.code, request.telephone, request.poNo, request.billDiscount, request.invoiceNo, request.invoiceAmount, request.net_amount, request.status, request.poDate, request.invoiceDate, request.brand,request.created_by,request.changed_by, request.finalInvoiceAmount]);
-  resolve(result.rows);
-  });   
+    const pool = con.createConnection();
+    var result = await pool.query('SELECT * from devices;')
+    // var result = await pool.query('INSERT INTO precence(supplier_code, telephone_no, po_no, bill_discount, invoice_no, invoice_amount, net_amount, status, po_date, invoice_date, brand, created_by, changed_by, final_invoice_amount ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING *;', [request.code, request.telephone, request.poNo, request.billDiscount, request.invoiceNo, request.invoiceAmount, request.net_amount, request.status, request.poDate, request.invoiceDate, request.brand,request.created_by,request.changed_by, request.finalInvoiceAmount]);
+    resolve(result.rows);
+    });   
 }
+
+function getDeviceDetails(uuid, con){
+  // return new Promise(async function(resolve) {
+      var qur = 'SELECT * from iot.device where device_UUID = "'+uuid+'";';
+      console.log('Connection established t o fetch devices : ',qur);
+      
+      var result = con.query(qur);
+      console.log("result ",result.rows);
+      // resolve(result.rows);
+    // });  
+}
+
 function handleDeviceState (message) {
   deviceState = message
   console.log('device state update to %s', message)
 }
-
-
-// function openDeviceDoor () {
-//   // can only open door if we're connected to mqtt and door isn't already open
-//   if (connected && deviceState !== 'open') {
-//     // Ask the door to open
-//     client.publish('device/open', 'true')
-//   }
-// }
-
-// function closeDeviceDoor () {
-//   // can only close door if we're connected to mqtt and door isn't already closed
-//   if (connected && deviceState !== 'closed') {
-//     // Ask the door to close
-//     client.publish('device/close', 'true')
-//   }
-// }
-
-// // --- For Demo Purposes Only ----//
-
-// // simulate opening garage door
-// setTimeout(() => {
-//   console.log('open door')
-//   openDeviceDoor()
-// }, 5000)
-
-// // simulate closing garage door
-// setTimeout(() => {
-//   console.log('close door')
-//   closeDeviceDoor()
-// }, 20000)
 
 module.exports = app;
