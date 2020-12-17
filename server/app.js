@@ -154,7 +154,9 @@ function handleDeviceConnected (message) {
   console.log('device connected status %s', message)
   let receviceData = JSON.parse(message);
   var uuid =   receviceData.device_UUID;
-  var time =  moment(receviceData.location_Time).format('YYYY-MM-DD');
+  let t = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+  console.log("================ T ================== : ",receviceData.t);
+  var time =  moment(t).format('YYYY-MM-DD hh:mm:ss');
   console.log("received device UUID : ",receviceData.device_UUID);
   const connection = mysql.createConnection({
     host: 'localhost',
@@ -201,42 +203,6 @@ function handleDeviceConnected (message) {
     });
     // connection.end((err));
   });
-
-  
-  // // var insertResults = await pool.query('INSERT INTO public.brand(name,created_by,status) VALUES (trim($1), $2, $3)',['1',uuid, 'Admin', currentDateTime, currentDateTime, xcoordinate, ycoordinate, location]);
-  // const con1 = mysql.createConnection({
-  //   host: 'localhost',
-  //   user: 'root',
-  //   password: 'abcd',
-  //   database: 'iot',
-  // });
-
-  // con1.connect(function(err) {
-  //   if (err) throw err;
-  //   con1.query(insertQuery,['1',uuid, 'Admin', currentDateTime, currentDateTime, xcoordinate, ycoordinate, location], function (err, result, fields) {
-  //     if (err) throw err;
-  //     console.log("Insert ",result);
-  //   });
-  // });
-  // con1.end();
-  // const con2 = mysql.createConnection({
-  //   host: 'localhost',
-  //   user: 'root',
-  //   password: 'abcd',
-  //   database: 'iot',
-  // });
-
-  // con2.connect(function(err) {
-  //   if (err) throw err;
-
-  //   con2.query("UPDATE device SET status = 1 WHERE device_UUID = '"+ uuid+"'", function (err, result, fields) {
-  //     if (err) throw err;
-  //     console.log("Update device status Result: " + result);
-  //   });
-  // });
-  
-  // con2.end();
-
   connected = (message.toString() === 'true')
 }
 

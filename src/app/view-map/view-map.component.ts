@@ -1,4 +1,6 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Subscription, interval } from 'rxjs';
 import { ViewMapService } from './view-map.service';
 
 @Component({
@@ -44,7 +46,10 @@ export class ViewMapComponent implements OnInit {
   y: number = 0;
   renderer: any;
   img1 = new Image();
-  constructor(private viewmapService : ViewMapService) { }
+  updateSubscription: Subscription;
+  constructor(private viewmapService : ViewMapService,
+    private router: Router, 
+    private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     
@@ -60,9 +65,16 @@ export class ViewMapComponent implements OnInit {
     this.context5 =  (this.myCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
     this.manContext = (this.manCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
     this.drawBuildingMap();
+      // TODO: fetch the details auto refresh
     this.checkUserPosition();
+    this.startAutoReferesh();
   }
 
+  startAutoReferesh() {
+      this.updateSubscription = interval(30000).subscribe(val => {
+        this.checkUserPosition();
+      });
+  }
   // /**
   //  * Draws something using the context we obtained earlier on
   //  */
@@ -76,6 +88,9 @@ export class ViewMapComponent implements OnInit {
   //   this.context.fillText("@realappie", x, y);
   // }
 
+  ngOnDestroy() {
+    this.updateSubscription.unsubscribe();
+  }
   
 	checkUserPosition() {
 		
@@ -101,19 +116,19 @@ export class ViewMapComponent implements OnInit {
   }
   
   goBack(){
-
+    this.router.navigate(['/view-map']);
   }
 	
 	positionUser(x, y) {
       // this.contextLayer2.clearRect(0, 0, 50, 38);
 
-      this.img1.onload = ()=>{
-        this.manContext.clearRect(0, 0, this.myCanvas.nativeElement.width, this.myCanvas.nativeElement.height);  // clear canvas
-        this.manContext.drawImage(this.img1, x, y);                       // draw image at current position
-        x -= 4;
-        if (x > 250) requestAnimationFrame(this.loopFunction)        // loop
-      }
-      this.img1.src = "http://i.stack.imgur.com/Rk0DW.png";  
+      // this.img1.onload = ()=>{
+      //   this.manContext.clearRect(0, 0, 50,38);  // clear canvas
+      //   this.manContext.drawImage(this.img1, x, y);                       // draw image at current position
+      //   x -= 4;
+      //   if (x > 250) requestAnimationFrame(this.loopFunction)        // loop
+      // }
+      // this.img1.src = "http://i.stack.imgur.com/Rk0DW.png";  
       // drawing of the test image - img1
       this.img1.onload = ()=> {
         this.manContext.clearRect(this.x, this.y, 50,38);
