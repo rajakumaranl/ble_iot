@@ -67,7 +67,7 @@ async function onAppStartUp() {
       console.log('Connection established');
       con.query('SELECT * from iot.device;', function (err, result) {
         if (err) throw err;
-        console.log("Result: " + result);
+        console.log("Available Devices : " + result.length);
       });
     });
     
@@ -155,9 +155,12 @@ function handleDeviceConnected (message) {
   let receviceData = JSON.parse(message);
   var uuid =   receviceData.device_UUID;
   let t = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
-  console.log("================ T ================== : ",receviceData.t);
+  console.log("================ T ================== : ",t);
   var time =  moment(t).format('YYYY-MM-DD hh:mm:ss');
   console.log("received device UUID : ",receviceData.device_UUID);
+  if(uuid ==''){
+    return;
+  }
   const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
@@ -170,18 +173,13 @@ function handleDeviceConnected (message) {
       console.log('Error connecting to Db ========> ', err);
       return;
     }
-    console.log('Connection established');
-    connection.query('SELECT * from iot.device;', function (err, result) {
-      if (err) throw err;
-      console.log("Result for list of devices : " + result);
-    });
-
-  
     var qur = 'SELECT * from iot.device WHERE iot.device.device_UUID = "'+uuid+'";';
-    console.log('Connection established to fetch devices : ',qur);
     connection.query(qur, [true], (error, results) => {
       if (error) {
         return console.error(error.message);
+      }
+      if(results.length == 0){
+        return;
       }
       var device = results[0];
       var xcoordinate = device.xcoordinate;
@@ -189,17 +187,25 @@ function handleDeviceConnected (message) {
       var location = device.device_Location;
       let deviceId = device.device_id;
 
+      //make the old locaiton false
+      var deleteQuery ='UPDATE iot.userpresence SET  End_Date "'+time+'")';
+      console.log('MAKE THE OLD POSITION AS INVALID : ',deleteQuery);
+      connection.query(deleteQuery, function (err, result) {
+        if (err) throw err;
+      });
+
+      //inserting the current position of the device
       var insertQuery ='INSERT INTO iot.userpresence (user_id,device_id,Created_By,Created_Date,End_Date,xcoordinate,ycoordinate,userlocation) '
-                    +'values (1,'+deviceId+', 1 ,"' +time+'", "'+ time+'", '+ xcoordinate+', '+ ycoordinate+', "'+ location+'")';
+                    +'values (1,'+deviceId+', 1 ,"' +time+'", NULL, '+ xcoordinate+', '+ ycoordinate+', "'+ location+'")';
       console.log('Connection established to fetch devices : ',insertQuery);
       connection.query(insertQuery, function (err, result) {
         if (err) throw err;
       });
-    });
-  
-    connection.query("UPDATE device SET status = 1 WHERE device_UUID = '"+ uuid+"'", function (err, result, fields) {
-      if (err) throw err;
-      console.log("Update device status Result: " + result);
+
+      connection.query("UPDATE device SET status = 1 WHERE device_UUID = '"+ uuid+"'", function (err, result, fields) {
+        if (err) throw err;
+        console.log("Update device status Result: " + result);
+      });
     });
     // connection.end((err));
   });
@@ -209,8 +215,7 @@ function handleDeviceConnected (message) {
 function updatePresence(){
   return new Promise(async function(resolve) {
     const pool = con.createConnection();
-    var result = await pool.query('SELECT * from devices;')
-    // var result = await pool.query('INSERT INTO precence(supplier_code, telephone_no, po_no, bill_discount, invoice_no, invoice_amount, net_amount, status, po_date, invoice_date, brand, created_by, changed_by, final_invoice_amount ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING *;', [request.code, request.telephone, request.poNo, request.billDiscount, request.invoiceNo, request.invoiceAmount, request.net_amount, request.status, request.poDate, request.invoiceDate, request.brand,request.created_by,request.changed_by, request.finalInvoiceAmount]);
+    var result = await pool.query('SELECT * from devices;');
     resolve(result.rows);
     });   
 }

@@ -103,6 +103,9 @@ export class ViewMapComponent implements OnInit {
       (data) => {
 				// responseJson.forEach(position, (key, value) {
           console.log("DATA ",data[0]);
+          if(data.length == 0){
+            return;
+          }
           let position = data[0];
 					x = position.xcoordinate;
 					y = position.ycoordinate;
@@ -139,15 +142,6 @@ export class ViewMapComponent implements OnInit {
       this.img1.src = '../assets/images/man.png';
   }
 
-  loopFunction(){
-    var ctx = (this.myCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
-
-    ctx.clearRect(0, 0, 50, 38);  // clear canvas
-        ctx.drawImage(this.img1, this.x, this.y);                       // draw image at current position
-        this.x -= 4;
-        if (this.x > 250) requestAnimationFrame(this.loopFunction) 
-  }
-
   drawBuildingMap(){
 		// var canvas = document.getElementById('myCanvas');
 		// var context0 = canvas.getContext('2d');
@@ -158,7 +152,6 @@ export class ViewMapComponent implements OnInit {
     // const x = (this.myCanvas.nativeElement as HTMLCanvasElement).width / 2;
     // const y = (this.myCanvas.nativeElement as HTMLCanvasElement).height / 2;
     // this.context.fillText("@realappie", x, y);
-    
 
 		this.context.beginPath();
 		this.context.moveTo(50,50);//Starting point of the diagram

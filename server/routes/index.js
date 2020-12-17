@@ -30,8 +30,7 @@ router.get('/available-devices', function(req, res, next) {
       console.log('Error connecting to Db ========> ', err);
       return;
     }
-    console.log('Connection established t o fetch devices');
-    // var updateAudit = await pool.query('INSERT INTO public.product_audit(product_id, mrp, price , module_name, operation , updated_json , operation_done_by) VALUES ($1, $2, $3, $4, $5, $6, $7)',[request.product_id, request.mrp, request.sellingPrice, request.module_name,'UPDATED',updateJson,request.changed_by])
+    
     con.query('SELECT * from iot.device;', function (err, result) {
       if (err)
         throw err;
@@ -56,12 +55,11 @@ router.get('/device-position', function(req, res, next) {
       console.log('Error connecting to Db ========> ', err);
       return;
     }
-    console.log('Connection established t o fetch devices');
     // var updateAudit = await pool.query('INSERT INTO public.product_audit(product_id, mrp, price , module_name, operation , updated_json , operation_done_by) VALUES ($1, $2, $3, $4, $5, $6, $7)',[request.product_id, request.mrp, request.sellingPrice, request.module_name,'UPDATED',updateJson,request.changed_by])
-    con.query('SELECT xcoordinate, ycoordinate from iot.userpresence order by userPresence_id  DESC LIMIT  1;', function (err, result) {
+    con.query('SELECT xcoordinate, ycoordinate from iot.userpresence where End_Date IS NULL order by userPresence_id  DESC LIMIT  1;', function (err, result) {
       if (err)
         throw err;
-
+      console.log("resuls for presence : ",result);
       res.status(200).send(result);
     });
   });

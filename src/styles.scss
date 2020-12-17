@@ -1,1 +1,280 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+// @import '~@angular/material/theming';
+// @include mat-core();
+// @import 'themes/default-theme.scss';
+// @import 'themes/support-theme-one.scss';
+// .default-light-theme {
+//     @include angular-material-theme($default-theme);
+//     @include mix-app-theme($default-theme);
+// }
+
+// .default-dark-theme {
+//     @include angular-material-theme($default-theme-dark);
+// }
+
+// //@include mix-app-theme($red-theme);
+// @include angular-material-theme($default-theme);
+// @include mix-app-theme($default-theme);
+// // Define a custom typography config that overrides the font-family as well as the
+// // `headlines` and `body-1` levels.
+// $custom-typography: mat-typography-config( $font-family: 'Roboto, sans-serif', $headline: mat-typography-level(32px, 48px, 700), $body-1: mat-typography-level(16px, 24px, 500));
+// // Override typography for all Angular Material, including mat-base-typography and all components.
+// @include angular-material-typography($custom-typography);
+// //Resolution for long checkbox labels
+// .mat-checkbox-layout {
+//     white-space: normal !important;
+// }
+
+// @include mat-core($custom-typography);
+// h1 {
+//     font-family: 'Roboto', sans-serif !important;
+//     color: #212121;
+//     font-size: 32px;
+//     font-weight: 300;
+//     line-height: 40px;
+// }
+
+// h2 {
+//     font-family: 'Roboto', sans-serif !important;
+//     color: #212121;
+//     font-size: 28px;
+//     line-height: 36px;
+// }
+
+// h3 {
+//     font-family: 'Roboto', sans-serif !important;
+//     color: #212121;
+//     font-size: 25px;
+//     letter-spacing: 0.3px;
+//     line-height: 31px;
+// }
+
+// h4 {
+//     font-family: 'Roboto', sans-serif !important;
+//     color: #212121;
+//     font-size: 22px;
+//     letter-spacing: 0.3px;
+//     line-height: 28px;
+// }
+
+// h5 {
+//     font-family: 'Roboto', sans-serif !important;
+//     color: #212121;
+//     font-size: 20px;
+//     font-weight: 500;
+//     letter-spacing: 0.3px;
+//     line-height: 24px;
+// }
+
+// h6 {
+//     font-family: 'Roboto', sans-serif !important;
+//     color: #111111;
+//     font-size: 18px;
+//     font-weight: bold;
+//     letter-spacing: 0.3px;
+//     line-height: 24px;
+// }
+
+// p {
+//     font-family: 'Roboto', sans-serif !important;
+//     font-size: 16px;
+//     letter-spacing: 0.5px;
+//     line-height: 24px;
+// }
+
+// .mat-tooltip {
+//     background-color: mat-color($primary-support-one);
+//     color: #fff;
+//     font-size: 14px;
+//     letter-spacing: 0.25px;
+//     line-height: 21px;
+// }
+
+// .mat-badge-content {
+//     background-color: mat-color($primary-support-two);
+//     color: black;
+// }
+
+// .mat-card {
+//     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+// }
+
+// .mat-step-header .mat-step-icon {
+//     background-color: mat-color($primary-support-three);
+//     color: white;
+// }
+
+// .mat-snack-bar-container-success {
+//     background-color: mat-color($primary-support-three);
+//     color: white
+// }
+
+// .mat-snack-bar-container-error {
+//     background: mat-color($default-warn);
+//     color: white
+// }
+
+// .mat-snack-bar-container-warn{
+//     background: #007DB6;
+//     color: white;
+// }
+// .mat-ink-bar{
+//     background-color: #b52527 !important;
+//     height: 4px !important;
+//   }
+// // Added for Select with outline
+// .mat-select {
+//     display: inline !important;
+// }
+
+// .mat-form-field-appearance-outline .mat-form-field-infix {
+//     padding: 0.5em 0 1em 0 !important;
+// }
+
+// /* User Addresses Radio */
+// .mat-radio-label {
+//     .radio-button-is-aligned-top & {
+//         align-items: flex-start;
+//     }
+// }
+
+//eo Added for Select with outline
+// Material Table font size
+.mat-cell,
+.mat-footer-cell {
+    font-size: 14px;
+}
+
+// //eo Material Table font size
+// //Added to align stepper label in icon
+// .mat-step-icon .mat-icon {
+//     padding-top: 2px;
+// }
+
+// //eo Added to align stepper label in icon
+// // Added to make pointer appear when hovering over an iconRegistered icon
+// .mat-icon:hover {
+//     cursor: pointer;
+// }
+
+// //eo Added to make pointer appear when hovering over an iconRegistered icon
+// // Site and Content are to allow the footer to be sticky
+// .site {
+//     display: flex;
+//     flex-direction: column;
+//     min-height: 100vh;
+// }
+
+// .content {
+//     flex: 1;
+// }
+
+// //eo Site and Content are to allow the footer to be sticky
+// // Prevent mat-icons from displaying file path when hover over icon
+// mat-icon {
+//     svg {
+//         pointer-events: none;
+//     }
+// }
+
+// // eo Prevent mat-icons from displaying file path when hover over icon
+// // Override to allow line breaks with \n
+// // mat-tooltip-component>.mat-tooltip {
+//     //     white-space: pre;
+//     //     max-width: 500px !important;
+//     // }
+
+
+// Responsive table fix
+// Note: Minor UX issue in firefox. I can't get scroll bar to always show, it currenlty hides when not being used on FireFox for Mac OS.
+.has-responsive-scroll {
+    .mat-table,
+    .native-table-wrapper {
+        overflow: scroll;
+        max-height: 400px;
+        position: relative;
+
+        thead {
+            th {
+                position: sticky;
+                top: 0;
+                z-index: 2;
+            }
+        }
+    }
+
+    ::-webkit-scrollbar-track {
+        width: 10px;
+      }
+
+    ::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background-color: rgba(0, 0, 0, .5);
+        box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+        padding-top: 80px
+    }
+    
+    ::-webkit-scrollbar {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        height: 8px;
+        width: 8px;
+        // border-left: 2px;
+    }
+}
+
+// This generates min width classes for tables, starting from 600 to 2000
+// Examples: .has-min-width-14 = min-width: 1400px; | .has-min-width-10 = min-width: 1000px;
+@for $i from 6 through 18 {
+    // Create the rule
+    .has-min-width-#{$i} {
+        .mat-row,
+        .mat-header-row,
+        table.mat-table {
+            min-width: 100px * $i;
+        }
+    }
+}
+
+// // Spacing Helpers
+// // Examples: .has-mt-1 = margin-top: 10px; | .has-mb-10 = margin-bottom: 100px; | .has-ml-8 = margin-left: 80px;
+// @mixin generate($prefix, $property) {
+//     // Spacing to multiply the sizes by
+//     $spacing: 10px;
+  
+//     // Loop through all of the sizes
+//     @for $i from 1 through 10 {
+
+//       // Create the rule
+//       .has-#{$prefix}-#{$i} {
+//         #{$property}: $spacing * $i;
+//       }
+//     }
+// }
+
+
+// // Helpers
+// .is-full-width {
+//     width: 100%;
+// }
+
+// .user-address-radio-button {
+//     &:last-child {
+//         margin-top: 10px;
+
+//         .mat-radio-label-content {
+//             margin-top: -10px;
+//             width: 100%;
+//         }
+
+//         .mat-radio-label {
+//             width: 100%;
+//         }
+//     }
+// }
+
+

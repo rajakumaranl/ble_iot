@@ -5,90 +5,69 @@
       
       <div class="row">
           <div class="col-md-4">
-            <button class="card" (click)="getAllAvailableDevices()">
+            <button mat-stroked-button color="primary" class="card" (click)="getAllAvailableDevices()">
                 <span>Refersh Devices</span>
               </button>
           </div>
           <div class="col-md-4">
-            <button class="card" (click)="addDevices()">
+            <button mat-stroked-button color="primary" class="card" (click)="addDevices()">
                 <span>Add devices</span>
-              </button>
+            </button>
           </div>
           <div class="col-md-4">
-            <button class="card" (click)="gotoUserStatus()">
+            <button mat-stroked-button color="primary" class="card" (click)="gotoUserStatus()">
                 <span><b>View Map</b></span>
               </button>
           </div>
       </div>
     </div>
     <div id="content"></div>
-    <!-- <div id="addDevice" >					
-    <form id="addDeviceForm">					
-        <table>
-        <thead><tr><td><h3>Add a new Beacon</h3></td></tr></thead>
-        <tbody>
-        <tr><td>Device Name </td><td><input type="text" name="device_name" id="device_name"></td></tr>
-        <tr><td>Device UUID </td><td><input type="text" name="device_name" id="device_uuid"></td></tr>
-        <tr><td>Device Location </td><td><input type="text" name="device_name" id="device_location"></td></tr>
-        <tr><td>Description</td><td><input type="text" name="device_name" id="device_description"></td></tr>
-        <tr><td><input type="button" class="button" value="Add" onclick=formSubmit()></td> <td><input type="reset" class="button" value="Cancel" onclick=hideForm()></td></tr>
-        </tbody>
-        </table>
-    </form>
-    </div> -->
-    <div class="col-md-6 user-container" *ngIf='showAddDevice'>
-        <h2 class="text-center">Edit User</h2>
-        <form role="form" [formGroup]="editForm" (submit)="onSubmit()" #f="ngForm" >
-          <div class="form-group">
-            <label for="deviceName">Device Name</label>
-            <input type="text" formControlName="device_name" placeholder="Device Name" name="device_name" class="form-control" id="username">
+    <div class="row">
+        <div class="col-md-12">
+          <div *ngIf="!hasData">
+            <mat-card class="pad-20">No devices to display</mat-card>
           </div>
-      
-          <div class="form-group">
-            <label for="uuid">UUID</label>
-            <input formControlName="uuid" placeholder="UUID" name="uuid" class="form-control" id="firstName">
-          </div>
-      
-          <div class="form-group">
-            <label for="device_address">Device MAC Address</label>
-            <input formControlName="device_address" placeholder="Device MAC Address" name="device_address" class="form-control" id="device_address">
-          </div>
-      
-          <div class="form-group">
-            <label for="location">Location</label>
-            <input formControlName="location" placeholder="Location" name="location" class="form-control" id="lastName">
-          </div>
-
-          <div class="form-group">
-            <label for="xcoordinate">X Co-ordinate</label>
-            <input formControlName="xcoordinate" placeholder="X Co-ordinate" name="xcoordinate" class="form-control" id="xcoordinate">
-          </div>
-
-          <div class="form-group">
-            <label for="ycoordinate">Y Co-ordinate</label>
-            <input formControlName="ycoordinate" placeholder="Y Co-ordinate" name="ycoordinate" class="form-control" id="ycoordinate">
-          </div>
-      
-          <button class="btn btn-success">Save</button>
-        </form>
+          <table *ngIf="hasData" mat-table [dataSource]="dataSource" class="table-width" id="reports-data-table">
+            <ng-container matColumnDef="device_name">
+              <th mat-header-cell *matHeaderCellDef id="device_name">Device Name </th>
+              <td mat-cell *matCellDef="let element" class="container-padding faculty_pad_right"> 
+                    <div>
+                      <span  class="faculty-assigned-0 ">{{element.device_name}}</span>
+                    </div>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="uuid">
+              <th mat-header-cell *matHeaderCellDef id="uuid">UUID </th>
+              <td mat-cell *matCellDef="let element" class="container-padding faculty_pad_right"> 
+                    <div>
+                      <span  class="faculty-assigned-0 ">{{element.device_UUID}}</span>
+                    </div>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="mac">
+              <th mat-header-cell *matHeaderCellDef id="hasaa"> MAC Address </th>
+              <td mat-cell *matCellDef="let element; let i = index;">
+                <span id = courseCode-{{i}}>{{element.device_Address}}</span>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="location">
+              <th mat-header-cell *matHeaderCellDef id="courseCode"> Location</th>
+              <td mat-cell *matCellDef="let element; let i = index;">
+                <span id = courseCode-{{i}}>{{element.device_Location}}</span>
+              </td>
+            </ng-container>
+    
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef id="sectionNumber"> Status</th>
+              <td mat-cell *matCellDef="let element; let i = index;">
+                <span id = sectionNumber-{{i}}>{{getDeviceStatus(element)}}</span>
+              </td>
+            </ng-container>
+    
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" id="no-course-header"></tr>
+            <tr mat-row *matRowDef="let element; let row; columns: displayedColumns;" class="element-row"></tr>
+          </table>
+        </div>
       </div>
 
-    <table mat-table class="simple clickable">
-        <thead>
-            <tr>
-                <th class="accent-fg">Device Name</th>
-                <th class="accent-fg">UUID</th>
-                <th class="accent-fg">Status</th>
-                <!-- <th class="text-right accent-fg">Qty to Order</th> -->
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let device of allDevices">
-                <td style="width: 50%">{{device.device_name}}</td>
-                <td style="width: 50%">{{device.device_UUID}}</td>
-                <td style="width: 50%">{{getDeviceStatus(device)}}</td>
-                <!-- <td class="text-right">{{item.qty_to_order}}</td> -->
-            </tr>
-        </tbody>
-    </table>
 </div>

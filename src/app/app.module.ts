@@ -9,6 +9,8 @@ import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from '@angular/common
 import { ViewMapComponent } from './view-map/view-map.component';
 // Import forms module
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AppMaterialModule } from './app-material/app-material.module';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     RouterModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    AppMaterialModule
   ],
   providers: [],
   bootstrap: [AppComponent]

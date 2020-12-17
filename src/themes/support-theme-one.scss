@@ -1,0 +1,10 @@
+$md-primary-support-one: ( 50: #e0e8ed, 100: #b3c5d2, 200: #809fb5, 300: #4d7897, 400: #265b80, 500: #003e6a, 600: #003862, 700: #003057, 800: #00284d, 900: #001b3c, A100: #72a2ff, A200: #3f80ff, A400: #0c5fff, A700: #0052f1, contrast: ( 50: #000000, 100: #000000, 200: #000000, 300: #ffffff, 400: #ffffff, 500: #ffffff, 600: #ffffff, 700: #ffffff, 800: #ffffff, 900: #ffffff, A100: #000000, A200: #ffffff, A400: #ffffff, A700: #ffffff, ));
+$md-primary-support-two: ( 50: #fff7e7, 100: #feecc3, 200: #fedf9c, 300: #fed274, 400: #fdc956, 500: #fdbf38, 600: #fdb932, 700: #fcb12b, 800: #fca924, 900: #fc9b17, A100: #ffffff, A200: #fffcf9, A400: #ffe5c6, A700: #ffdaad, contrast: ( 50: #000000, 100: #000000, 200: #000000, 300: #000000, 400: #000000, 500: #000000, 600: #000000, 700: #000000, 800: #000000, 900: #000000, A100: #000000, A200: #000000, A400: #000000, A700: #000000, ));
+$md-primary-support-three: ( 50: #e0f0e9, 100: #b3dac9, 200: #80c2a5, 300: #4da980, 400: #269665, 500: #00844a, 600: #007c43, 700: #00713a, 800: #006732, 900: #005422, A100: #86ffac, A200: #53ff88, A400: #20ff65, A700: #07ff53, contrast: ( 50: #000000, 100: #000000, 200: #000000, 300: #000000, 400: #ffffff, 500: #ffffff, 600: #ffffff, 700: #ffffff, 800: #ffffff, 900: #ffffff, A100: #000000, A200: #000000, A400: #000000, A700: #000000, ));
+$primary-support-one: mat-palette($md-primary-support-one);
+$primary-support-two: mat-palette($md-primary-support-two);
+$primary-support-three: mat-palette($md-primary-support-three);
+// Export theme colors
+// $primary-support-one: mat-color($primary-support-one);
+// $primary-support-two: mat-color($primary-support-two);
+// $primary-support-three: mat-color($primary-support-three);

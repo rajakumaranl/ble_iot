@@ -1,0 +1,37 @@
+$md-primary-default: ( 50: #e0eff6, 100: #b3d8e9, 200: #80bedb, 300: #4da4cc, 400: #2691c1, 500: #007db6, 600: #0075af, 700: #006aa6, 800: #00609e, 900: #004d8e, A100: #badbff, A200: #87c0ff, A400: #54a5ff, A700: #3b97ff, contrast: ( 50: #000000, 100: #000000, 200: #000000, 300: #000000, 400: #ffffff, 500: #ffffff, 600: #ffffff, 700: #ffffff, 800: #ffffff, 900: #ffffff, A100: #000000, A200: #000000, A400: #000000, A700: #000000, ));
+//$md-accent-default: ( 50: #fff7e6, 100: #feefcd, 200: #fee6b3, 300: #fede9a, 400: #fdbf38, 500: #fdce68, 600: #fdc64e, 700: #fdbf38, 800: #fdbe35, 900: #fdb51c, A100: #fee6b3, A200: #fdbf38, A400: #fdc64e, A700: #fdbf38, contrast: ( 50: #000000, 100: #000000, 200: #000000, 300: #ffffff, 400: #ffffff, 500: #ffffff, 600: #ffffff, 700: #ffffff, 800: #ffffff, 900: #ffffff, A100: #000000, A200: #000000, A400: #ffffff, A700: #ffffff, ));
+$md-accent-default: ( 50: #e0eff6, 100: #b3d8e9, 200: #80bedb, 300: #4da4cc, 400: #2691c1, 500: #007db6, 600: #0075af, 700: #006aa6, 800: #00609e, 900: #004d8e, A100: #badbff, A200: #87c0ff, A400: #54a5ff, A700: #3b97ff, contrast: ( 50: #000000, 100: #000000, 200: #000000, 300: #000000, 400: #ffffff, 500: #ffffff, 600: #ffffff, 700: #ffffff, 800: #ffffff, 900: #ffffff, A100: #000000, A200: #000000, A400: #000000, A700: #000000, ));
+$md-warn-default: ( 50: #f4e1e1, 100: #e3b4b4, 200: #d18383, 300: #bf5151, 400: #b12b2b, 500: #a30606, 600: #9b0505, 700: #910404, 800: #880303, 900: #770202, A100: #ffa5a5, A200: #ff7272, A400: #ff3f3f, A700: #ff2525, contrast: ( 50: #000000, 100: #000000, 200: #000000, 300: #ffffff, 400: #ffffff, 500: #ffffff, 600: #ffffff, 700: #ffffff, 800: #ffffff, 900: #ffffff, A100: #000000, A200: #000000, A400: #ffffff, A700: #ffffff, ));
+$default-primary: mat-palette($md-primary-default);
+$default-accent: mat-palette($md-accent-default, A200, A100, A400);
+$default-warn: mat-palette($md-warn-default);
+$default-theme: mat-light-theme($default-primary, $default-accent, $default-warn);
+$default-theme-dark: mat-dark-theme($default-primary, $default-accent, $default-warn);
+@mixin mix-app-theme($default-theme) {
+    $primary: map-get($default-theme, primary);
+    $accent: map-get($default-theme, accent);
+    .mat-button-toggle {
+        color: rgba(0, 0, 0, 0.87);
+        outline: none;
+    }
+    .mat-button-toggle-checked {
+        background-color: mat-color($primary);
+        color: mat-color($primary, default-contrast);
+        outline: none;
+    }
+}
+
+@mixin mat-toolbar-height($height) {
+    .mat-toolbar-multiple-rows {
+        min-height: $height;
+    }
+    .mat-toolbar-row,
+    .mat-toolbar-single-row {
+        height: $height;
+    }
+}
+
+// Export theme colors
+$primary: mat-color($default-primary);
+$accent: mat-color($default-accent);
+$warn: mat-color($default-warn);

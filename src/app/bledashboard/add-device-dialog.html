@@ -1,0 +1,49 @@
+<div class="user-container">
+    <h2 class="text-center">Edit User</h2>
+    <form role="form" [formGroup]="editForm" (submit)="onSubmit()" >
+      <div class="form-group">
+        <label for="deviceName">Device Name</label>
+        <input type="text" formControlName="device_name" placeholder="Device Name" name="device_name" class="form-control" id="username">
+      </div>
+  
+      <div class="form-group">
+        <label for="uuid">UUID</label>
+        <input formControlName="uuid" placeholder="UUID" name="uuid" class="form-control" id="firstName">
+      </div>
+  
+      <div class="form-group">
+        <label for="device_address">Device MAC Address</label>
+        <input formControlName="device_address" placeholder="Device MAC Address" name="device_address" class="form-control" id="device_address">
+      </div>
+  
+      <div class="form-group">
+        <label for="location">Location</label>
+        <input formControlName="location" placeholder="Location" name="location" class="form-control" id="lastName">
+      </div>
+
+      <div class="form-group">
+        <label for="xcoordinate">X Co-ordinate</label>
+        <input formControlName="xcoordinate" placeholder="X Co-ordinate" name="xcoordinate" class="form-control" id="xcoordinate">
+      </div>
+
+      <div class="form-group">
+        <label for="ycoordinate">Y Co-ordinate</label>
+        <input formControlName="ycoordinate" placeholder="Y Co-ordinate" name="ycoordinate" class="form-control" id="ycoordinate">
+      </div>
+  
+      <div class="row">
+          <div class="col-md-4">
+            <button mat-raised-button class="card btn btn-success">
+                <span>Save</span>
+              </button>
+          </div>
+          <div class="col-md-1"></div>
+          <div class="col-md-4">
+            <button mat-raised-button color="primary" class="card btn">
+                <span>Cancel</span>
+            </button>
+            </div>
+        </div>
+      <!-- <button class="btn btn-success">Save</button> -->
+    </form>
+  </div>
