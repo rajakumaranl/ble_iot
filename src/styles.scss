@@ -240,6 +240,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     }
 }
 
+.mat-table {
+    width: 100%;
+}
 // // Spacing Helpers
 // // Examples: .has-mt-1 = margin-top: 10px; | .has-mb-10 = margin-bottom: 100px; | .has-ml-8 = margin-left: 80px;
 // @mixin generate($prefix, $property) {

@@ -44,6 +44,9 @@ export class ViewMapComponent implements OnInit {
   @Input() public height = 5;
   x: number = 0;
   y: number = 0;
+  textX: number = 0;
+  textY: number = 0;
+
   renderer: any;
   img1 = new Image();
   updateSubscription: Subscription;
@@ -119,25 +122,23 @@ export class ViewMapComponent implements OnInit {
   }
   
   goBack(){
-    this.router.navigate(['/view-map']);
+    this.router.navigate(['/view-devices']);
   }
 	
 	positionUser(x, y) {
-      // this.contextLayer2.clearRect(0, 0, 50, 38);
 
-      // this.img1.onload = ()=>{
-      //   this.manContext.clearRect(0, 0, 50,38);  // clear canvas
-      //   this.manContext.drawImage(this.img1, x, y);                       // draw image at current position
-      //   x -= 4;
-      //   if (x > 250) requestAnimationFrame(this.loopFunction)        // loop
-      // }
-      // this.img1.src = "http://i.stack.imgur.com/Rk0DW.png";  
-      // drawing of the test image - img1
       this.img1.onload = ()=> {
-        this.manContext.clearRect(this.x, this.y, 50,38);
+		// this.manContext.clearRect(this.x, this.y, 30,48);
+		this.manContext.clearRect(0,0, 1000, 600);
         this.x = x;
         this.y = y;
-        this.manContext.drawImage(this.img1, x, y, 50, 38);
+		this.manContext.drawImage(this.img1, x, y, 30, 48);
+		this.textX = x+25;
+		let rect = y+15;
+		this.textY = y+15;
+		this.manContext.fillStyle = "#FF0000";
+		this.manContext.font = "16px Arial";
+		this.manContext.fillText("Hey, I'm Here", this.textX, this.textY, 70);
       }
       this.img1.src = '../assets/images/man.png';
   }
@@ -149,299 +150,275 @@ export class ViewMapComponent implements OnInit {
     this.context.textBaseline = 'middle';
     this.context.textAlign = 'center';
 
-    // const x = (this.myCanvas.nativeElement as HTMLCanvasElement).width / 2;
-    // const y = (this.myCanvas.nativeElement as HTMLCanvasElement).height / 2;
-    // this.context.fillText("@realappie", x, y);
+	this.context.beginPath();
+	this.context.moveTo(50,50);//Starting point of the diagram
+	this.context.lineTo(50,500);//top to bottom
+	this.context.lineTo(900,500);//bottom-left to bottom-right side
+	this.context.lineTo(900,50);//bottom-right to top-right side
+	this.context.lineTo(50,50);
+	this.context.fillStyle = '#FFFFFF'; // I'd like to set with CSS
+	this.context.fill();
+	this.context.lineWidth = 1; // I'd like to set with CSS
+	this.context.strokeStyle = '#003300'; // I'd like to set with CSS
+	this.context.stroke();
+	this.context.strokeText("", 200, 150);
 
-		this.context.beginPath();
-		this.context.moveTo(50,50);//Starting point of the diagram
-		this.context.lineTo(50,500);//top to bottom
-		this.context.lineTo(900,500);//bottom-left to bottom-right side
-		this.context.lineTo(900,50);//bottom-right to top-right side
-		this.context.lineTo(50,50);
-		this.context.fillStyle = '#FFFFFF'; // I'd like to set with CSS
-		this.context.fill();
-		this.context.lineWidth = 1; // I'd like to set with CSS
-		this.context.strokeStyle = '#003300'; // I'd like to set with CSS
-		this.context.stroke();
-		this.context.strokeText("", 200, 150);
+	this.context.beginPath();
+    this.context.moveTo(50,50);//Starting point of the diagram
+	this.context.lineTo(50,500);//top to bottom
+	this.context.lineTo(900,500);//bottom-left to bottom-right side
+	this.context.lineTo(900,450);//bottom-right to top-right side
 
-
-		// var canvas = document.getElementById('myCanvas');
-		// var context = canvas.getContext('2d');
-
-		this.context.beginPath();
-    this.	context.moveTo(50,50);//Starting point of the diagram
-		this.context.lineTo(50,500);//top to bottom
-		this.context.lineTo(900,500);//bottom-left to bottom-right side
-		this.context.lineTo(900,450);//bottom-right to top-right side
-
-		this.context.moveTo(900,400);
-		this.context.lineTo(900,50);
-		this.context.lineTo(50,50);
-		  
-		this.context.moveTo(930,400);
-		this.context.lineTo(900,400);
-
-		this.context.moveTo(900,450);
-		this.context.lineTo(900,450);
+	this.context.moveTo(900,400);
+	this.context.lineTo(900,50);
+	this.context.lineTo(50,50);
 		
-		this.context.moveTo(900,450);
-		this.context.lineTo(900,450);
-		this.context.lineWidth = 5; // I'd like to set with CSS
-		this.context.strokeStyle = '#2f3030'; // I'd like to set with CSS
-		this.context.stroke();
+	this.context.moveTo(930,400);
+	this.context.lineTo(900,400);
 
-		// var canvas1 = document.getElementById('myCanvas');
-		// var context1 = canvas.getContext('2d');
-		this.context1.beginPath();	
-		this.context1.lineWidth = 3; // I'd like to set with CSS
-		this.context1.strokeStyle = '#2f3030'; // I'd like to set with CSS
+	this.context.moveTo(900,450);
+	this.context.lineTo(900,450);
+	
+	this.context.moveTo(900,450);
+	this.context.lineTo(900,450);
+	this.context.lineWidth = 5; // I'd like to set with CSS
+	this.context.strokeStyle = '#2f3030'; // I'd like to set with CSS
+	this.context.stroke();
 
-		this.context1.moveTo(50,250);
-		this.context1.lineTo(150,250);//bottom-left to bottom-right side	  
+	// var canvas1 = document.getElementById('myCanvas');
+	// var context1 = canvas.getContext('2d');
+	this.context1.beginPath();	
+	this.context1.lineWidth = 3; // I'd like to set with CSS
+	this.context1.strokeStyle = '#2f3030'; // I'd like to set with CSS
 
-		this.context1.moveTo(900,300);
-		this.context1.lineTo(800,300);
+	this.context1.moveTo(50,250);
+	this.context1.lineTo(150,250);//bottom-left to bottom-right side	  
 
-		this.context1.moveTo(200,250);
-		this.context1.lineTo(200,200);
+	this.context1.moveTo(900,300);
+	this.context1.lineTo(800,300);
 
-		this.context1.moveTo(200,250);
-		this.context1.lineTo(300,250);
+	this.context1.moveTo(200,250);
+	this.context1.lineTo(200,200);
 
-		this.context1.moveTo(350,250);
-		this.context1.lineTo(550,250);
+	this.context1.moveTo(200,250);
+	this.context1.lineTo(300,250);
 
-		this.context1.moveTo(600,250);
-		this.context1.lineTo(700,250);
+	this.context1.moveTo(350,250);
+	this.context1.lineTo(550,250);
 
-		this.context1.moveTo(200,50)
-		this.context1.lineTo(200,250);//bottom-right to top-right side
+	this.context1.moveTo(600,250);
+	this.context1.lineTo(700,250);
 
-		this.context1.moveTo(400,50)
-		this.context1.lineTo(400,250);//bottom-right to top-right side
+	this.context1.moveTo(200,50)
+	this.context1.lineTo(200,250);//bottom-right to top-right side
 
-		this.context1.moveTo(600,50)
-		this.context1.lineTo(600,250);//bottom-right to top-right side
+	this.context1.moveTo(400,50)
+	this.context1.lineTo(400,250);//bottom-right to top-right side
 
-		this.context1.moveTo(750,50)
-		this.context1.lineTo(750,250);
+	this.context1.moveTo(600,50)
+	this.context1.lineTo(600,250);//bottom-right to top-right side
 
-		this.context1.moveTo(50,300);
-		this.context1.lineTo(150,300);
+	this.context1.moveTo(750,50)
+	this.context1.lineTo(750,250);
 
-		this.context1.moveTo(200,300);
-		this.context1.lineTo(300,300);
+	this.context1.moveTo(50,300);
+	this.context1.lineTo(150,300);
 
-		this.context1.moveTo(350,300);
-		this.context1.lineTo(550,300);	  
+	this.context1.moveTo(200,300);
+	this.context1.lineTo(300,300);
 
-		this.context1.moveTo(200,300)
-		this.context1.lineTo(200,500);//bottom-right to top-right side
+	this.context1.moveTo(350,300);
+	this.context1.lineTo(550,300);	  
 
-		this.context1.moveTo(400,300)
-		this.context1.lineTo(400,500);//bottom-right to top-right side
+	this.context1.moveTo(200,300)
+	this.context1.lineTo(200,500);//bottom-right to top-right side
+	this.context1.moveTo(400,300)
+	this.context1.lineTo(400,500);//bottom-right to top-right side
+	this.context1.moveTo(600,300)
+	this.context1.lineTo(600,500);//bottom-right to top-right side
+	this.context1.moveTo(650,300);
+	this.context1.lineTo(701,300);
+	this.context1.stroke();
+	
+	// var context2 = canvas.getContext("2d");
+	this.context2.beginPath();
+	
+	this.context2.moveTo(700,300);
+	this.context2.lineTo(750,350);
 
-		this.context1.moveTo(600,300)
-		this.context1.lineTo(600,500);//bottom-right to top-right side
+	this.context2.moveTo(750,350);
+	this.context2.lineTo(750,500);
+	this.context2.lineWidth = 3; // I'd like to set with CSS
+	this.context2.strokeStyle = '#2e3300'; // I'd like to set with CSS
+	this.context2.stroke();
+	
+	var canvas = document.getElementById("myCanvas")
 
-		this.context1.moveTo(650,300);
-		this.context1.lineTo(701,300);
-
-		this.context1.stroke();
-		
-		// var canvas = document.getElementById("myCanvas");
-		// var context2 = canvas.getContext("2d");
-		this.context2.beginPath();
-		
-		this.context2.moveTo(700,300);
-		this.context2.lineTo(750,350);
-
-		this.context2.moveTo(750,350);
-		this.context2.lineTo(750,500);
-		this.context2.lineWidth = 3; // I'd like to set with CSS
-		this.context2.strokeStyle = '#2e3300'; // I'd like to set with CSS
-		this.context2.stroke();
-		
-		var canvas = document.getElementById("myCanvas");
-		var roomName = (this.myCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
-		roomName.beginPath();
-		roomName.lineWidth = 1;
-		roomName.font="veranda 6px Times";
-		roomName.strokeStyle = '#330018'; 
-		roomName.strokeText("Reception", 800, 450);
-		roomName.stroke();
-
-		//***************************Cafeteria start*********************
-		var canvas = document.getElementById("myCanvas");
-		var ctx = (this.myCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
-		ctx.beginPath();
-		ctx.lineWidth = 2; // I'd like to set with CSS
-		ctx.strokeStyle = '#330018'; // I'd like to set with CSS
-		ctx.stroke();
-		ctx.arc(800,90,15,0,2*Math.PI);
-		ctx.stroke();
-		
-		var canvas = document.getElementById("myCanvas");
-		var ctx = (this.myCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
-		ctx.beginPath();
-		ctx.lineWidth = 2; // I'd like to set with CSS
-		ctx.strokeStyle = '#330018'; // I'd like to set with CSS
-		ctx.stroke();
-		ctx.arc(800,130,15,0,2*Math.PI);
-		ctx.stroke();
-		
-		var canvas = document.getElementById("myCanvas");
+	//***************************Cafeteria start*********************
+	
+	var ctx = (this.myCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
+	ctx.beginPath();
+	ctx.lineWidth = 2; // I'd like to set with CSS
+	ctx.strokeStyle = '#47363e'; // I'd like to set with CSS
+	ctx.stroke();
+	ctx.arc(800,90,15,0,2*Math.PI);
+	ctx.stroke();
+	
+	
+	var ctx = (this.myCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
+	ctx.beginPath();
+	ctx.lineWidth = 2; // I'd like to set with CSS
+	ctx.strokeStyle = '#47363e'; // I'd like to set with CSS
+	ctx.stroke();
+	ctx.arc(800,130,15,0,2*Math.PI);
+	ctx.stroke();
+	
+	
     var ctx =  (this.myCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
-		ctx.beginPath();
-		ctx.lineWidth = 2; // I'd like to set with CSS
-		ctx.strokeStyle = '#330018'; // I'd like to set with CSS
-		ctx.stroke();
-		ctx.arc(800,170,15,0,2*Math.PI);
-		ctx.stroke();
-		
-		var canvas = document.getElementById("myCanvas");
-		var ctx = (this.myCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
-		ctx.beginPath();
-		ctx.lineWidth = 2; // I'd like to set with CSS
-		ctx.strokeStyle = '#330018'; // I'd like to set with CSS
-		ctx.stroke();
-		ctx.arc(850,90,15,0,2*Math.PI);
-		ctx.stroke();
-		
-		var canvas = document.getElementById("myCanvas");
-		var ctx = (this.myCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
-		ctx.beginPath();
-		ctx.lineWidth = 2; // I'd like to set with CSS
-		ctx.strokeStyle = '#330018'; // I'd like to set with CSS
-		ctx.stroke();
-		ctx.arc(850,130,15,0,2*Math.PI);
-		ctx.stroke();
-		
-		var canvas = document.getElementById("myCanvas");
-		var ctx = (this.myCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
-		ctx.beginPath();
-		ctx.lineWidth = 2; // I'd like to set with CSS
-		ctx.strokeStyle = '#330018'; // I'd like to set with CSS
-		ctx.stroke();
-		ctx.arc(850,170,15,0,2*Math.PI);
-		ctx.stroke();
+	ctx.beginPath();
+	ctx.lineWidth = 2; // I'd like to set with CSS
+	ctx.strokeStyle = '#47363e'; // I'd like to set with CSS
+	ctx.stroke();
+	ctx.arc(800,170,15,0,2*Math.PI);
+	ctx.stroke();
+	
+	
+	var ctx = (this.myCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
+	ctx.beginPath();
+	ctx.lineWidth = 2; // I'd like to set with CSS
+	ctx.strokeStyle = '#47363e'; // I'd like to set with CSS
+	ctx.stroke();
+	ctx.arc(850,90,15,0,2*Math.PI);
+	ctx.stroke();
+	
+	
+	var ctx = (this.myCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
+	ctx.beginPath();
+	ctx.lineWidth = 2; // I'd like to set with CSS
+	ctx.strokeStyle = '#47363e'; // I'd like to set with CSS
+	ctx.stroke();
+	ctx.arc(850,130,15,0,2*Math.PI);
+	ctx.stroke();
+	
+	
+	var ctx = (this.myCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
+	ctx.beginPath();
+	ctx.lineWidth = 2; // I'd like to set with CSS
+	ctx.strokeStyle = '#47363e'; // I'd like to set with CSS
+	ctx.stroke();
+	ctx.arc(850,170,15,0,2*Math.PI);
+	ctx.stroke();
 
-		//***************************Cafeteria end*********************
-		//**************Reception Table **********************
-			var canvas = document.getElementById('myCanvas');
-			var receptionTable = (this.myCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
+	//***************************Cafeteria end*********************
+	//**************Reception Table **********************
+	var canvas = document.getElementById('myCanvas');
+	var receptionTable = (this.myCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
 
-			receptionTable.beginPath();
-			receptionTable.arc(850, 315, 40, 0, Math.PI, false);
-			receptionTable.closePath();
-			receptionTable.lineWidth = 3;
-			receptionTable.fillStyle = '#7f8482';
-			receptionTable.fill();
-			receptionTable.strokeStyle = 'black';
-			receptionTable.stroke();
-			
-			
-		//*************************************************
+	receptionTable.beginPath();
+	receptionTable.arc(850, 315, 40, 0, Math.PI, false);
+	receptionTable.closePath();
+	receptionTable.lineWidth = 3;
+	receptionTable.fillStyle = '#7f8482';
+	receptionTable.fill();
+	receptionTable.strokeStyle = 'black';
+	receptionTable.stroke();
 		
-		var canvas = document.getElementById("myCanvas");
-		var roomName = (this.myCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
-		roomName.beginPath();
-		roomName.lineWidth = 1;
-		//roomName.font="veranda 6px Times";
-		roomName.strokeStyle = '#330018'; 
-		roomName.strokeText("Cafeteria", 800, 150);
-		roomName.stroke();
-		
-		var canvas = document.getElementById("myCanvas");
-		var roomName = (this.myCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
-		roomName.beginPath();
-		roomName.lineWidth = 1;
-		//roomName.font="veranda 6px Times";
-		roomName.strokeStyle = '#330018'; 
-		roomName.strokeText("Confrence Hall 1", 620, 150);
-		roomName.stroke();
-		
-		
-		var canvas = document.getElementById("myCanvas");
-		var roomName = (this.myCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
-		roomName.beginPath();
-		roomName.lineWidth = 1;
-		//roomName.font="veranda 6px Times";
-		roomName.strokeStyle = '#330018'; 
-		roomName.strokeText("Confrence Hall 2", 100, 150);
-		roomName.stroke();
-		
-		var canvas = document.getElementById("myCanvas");
-		var roomName = (this.myCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
-		roomName.beginPath();
-		roomName.lineWidth = 1;
-		//roomName.font="veranda 6px Times";
-		roomName.strokeStyle = '#330018'; 
-		roomName.strokeText("Server Room", 100, 400);
-		roomName.stroke();
-		
-		
-		var canvas = document.getElementById("myCanvas");
-		var roomName = (this.myCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
-		roomName.beginPath();
-		roomName.lineWidth = 1;
-		//roomName.font="veranda 6px Times";
-		roomName.strokeStyle = '#330018'; 
-		roomName.strokeText("Dev Room 4", 270, 150);
-		roomName.stroke();
-		
-			var canvas = document.getElementById("myCanvas");
-		var roomName = (this.myCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
-		roomName.beginPath();
-		roomName.lineWidth = 1;
-		//roomName.font="veranda 6px Times";
-		roomName.strokeStyle = '#330018'; 
-		roomName.strokeText("Dev Room 2", 470, 150);
-		roomName.stroke();
-		
-		
-		var canvas = document.getElementById("myCanvas");
-		var roomName = (this.myCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
-		roomName.beginPath();
-		roomName.lineWidth = 1;
-		//roomName.font="veranda 6px Times";
-		roomName.strokeStyle = '#330018'; 
-		roomName.strokeText("Dev Room 3", 270, 400);
-		roomName.stroke();
-		
-			var canvas = document.getElementById("myCanvas");
-		var roomName = (this.myCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
-		roomName.beginPath();
-		roomName.lineWidth = 1;
-		//roomName.font="veranda 6px Times";
-		roomName.strokeStyle = '#330018'; 
-		roomName.strokeText("Dev Room 1", 470, 400);
-		roomName.stroke();
-		
-		var canvas = document.getElementById("myCanvas");
-		var roomName = (this.myCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
-		roomName.beginPath();
-		roomName.lineWidth = 1;
-		//roomName.font="veranda 6px Times";
-		roomName.strokeStyle = '#330018'; 
-		roomName.strokeText("IT Support ", 650, 400);
-		roomName.stroke();
-		
-		//****************************************************
-		//  this.drawCanvas();
-		
-		this.receptionTable();
+	//*************************************************
+	var roomName = (this.myCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
+	roomName.beginPath();
+	roomName.lineWidth = 1;
+	// roomName.font="veranda 6px Times";
+	roomName.strokeStyle = '#47363e'; 
+	roomName.fillText("Reception", 800, 400);
+	roomName.stroke();
+	//*************************************************
+	
+	var roomName = (this.myCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
+	roomName.beginPath();
+	roomName.lineWidth = 1;
+	//roomName.font="veranda 6px Times";
+	roomName.strokeStyle = '#47363e'; 
+	roomName.fillText("Cafeteria", 800, 200);
+	roomName.stroke();
+	
+	var roomName = (this.myCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
+	roomName.beginPath();
+	roomName.lineWidth = 1;
+	//roomName.font="veranda 6px Times";
+	roomName.strokeStyle = '#47363e'; 
+	roomName.fillText("Confrence Hall 1", 670, 150);
+	roomName.stroke();
+	
+	var roomName = (this.myCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
+	roomName.beginPath();
+	roomName.lineWidth = 1;
+	//roomName.font="veranda 6px Times";
+	roomName.strokeStyle = '#47363e'; 
+	roomName.fillText("Confrence Hall 2", 120, 150);
+	roomName.stroke();
+	
+	var roomName = (this.myCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
+	roomName.beginPath();
+	roomName.lineWidth = 1;
+	//roomName.font="veranda 6px Times";
+	roomName.strokeStyle = '#47363e'; 
+	roomName.fillText("Server Room", 120, 400);
+	roomName.stroke();
+	
+	var roomName = (this.myCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
+	roomName.beginPath();
+	roomName.lineWidth = 1;
+	//roomName.font="veranda 6px Times";
+	roomName.strokeStyle = '#47363e'; 
+	roomName.fillText("Dev Room 4", 270, 180);
+	roomName.stroke();
+	
+	var roomName = (this.myCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
+	roomName.beginPath();
+	roomName.lineWidth = 1;
+	roomName.font="veranda 6px Times";
+	roomName.strokeStyle = '#47363e'; 
+	// roomName.strokeText("Dev Room 2", 470, 150);
+	roomName.fillText("Dev Room 2", 470, 150);
+	roomName.stroke();
+
+	var roomName = (this.myCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
+	roomName.beginPath();
+	roomName.lineWidth = 1;
+	//roomName.font="veranda 6px Times";
+	roomName.strokeStyle = '#47363e'; 
+	roomName.fillText("Dev Room 3", 270, 400);
+	roomName.stroke();
+	
+	var roomName = (this.myCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
+	roomName.beginPath();
+	roomName.lineWidth = 1;
+	//roomName.font="veranda 6px Times";
+	roomName.strokeStyle = '#47363e'; 
+	roomName.fillText("Dev Room 1", 470, 400);
+	roomName.stroke();
+	
+	var roomName = (this.myCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
+	roomName.beginPath();
+	roomName.lineWidth = 1;
+	//roomName.font="veranda 6px Times";
+	roomName.strokeStyle = '#47363e'; 
+	roomName.fillText("IT Support ", 650, 400);
+	roomName.stroke();
+	
+	//****************************************************
+	this.receptionTable();
+	this.drawCanvas();
   }
   
   //****************************************************
   drawCanvas() {
-    var canvas = document.getElementById("canvasText");
+    
     var context = (this.myCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
   // Italic Stroke Text
-    context.font="italic 16px Times";
-    context.strokeText("Italic, Stroke, Text, 26px, times", 20, 85);
+	context.font="italic 26px Times";
+	context.fillStyle= '#301202';
+    context.fillText("Office work space", 400, 275);
   }
   
   receptionTable(){

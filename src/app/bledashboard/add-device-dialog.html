@@ -1,6 +1,6 @@
 <div class="user-container">
     <h2 class="text-center">Edit User</h2>
-    <form role="form" [formGroup]="editForm" (submit)="onSubmit()" >
+    <form role="form" [formGroup]="editForm" >
       <div class="form-group">
         <label for="deviceName">Device Name</label>
         <input type="text" formControlName="device_name" placeholder="Device Name" name="device_name" class="form-control" id="username">
@@ -33,13 +33,13 @@
   
       <div class="row">
           <div class="col-md-4">
-            <button mat-raised-button class="card btn btn-success">
+            <button mat-raised-button color="primary" class="card btn btn-success" (click)="onSubmit()" >
                 <span>Save</span>
               </button>
           </div>
           <div class="col-md-1"></div>
           <div class="col-md-4">
-            <button mat-raised-button color="primary" class="card btn">
+            <button mat-raised-button color="secondary" class="card btn" (click)="closeDialog()">
                 <span>Cancel</span>
             </button>
             </div>

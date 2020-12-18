@@ -1,73 +1,75 @@
-<p>Device Dashboard</p>
-
-<div>
-    <div class="card-container">
-      
-      <div class="row">
-          <div class="col-md-4">
-            <button mat-stroked-button color="primary" class="card" (click)="getAllAvailableDevices()">
-                <span>Refersh Devices</span>
-              </button>
-          </div>
-          <div class="col-md-4">
-            <button mat-stroked-button color="primary" class="card" (click)="addDevices()">
-                <span>Add devices</span>
-            </button>
-          </div>
-          <div class="col-md-4">
-            <button mat-stroked-button color="primary" class="card" (click)="gotoUserStatus()">
-                <span><b>View Map</b></span>
-              </button>
-          </div>
-      </div>
-    </div>
-    <div id="content"></div>
+<div class="container">
     <div class="row">
         <div class="col-md-12">
-          <div *ngIf="!hasData">
-            <mat-card class="pad-20">No devices to display</mat-card>
-          </div>
-          <table *ngIf="hasData" mat-table [dataSource]="dataSource" class="table-width" id="reports-data-table">
-            <ng-container matColumnDef="device_name">
-              <th mat-header-cell *matHeaderCellDef id="device_name">Device Name </th>
-              <td mat-cell *matCellDef="let element" class="container-padding faculty_pad_right"> 
-                    <div>
-                      <span  class="faculty-assigned-0 ">{{element.device_name}}</span>
-                    </div>
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="uuid">
-              <th mat-header-cell *matHeaderCellDef id="uuid">UUID </th>
-              <td mat-cell *matCellDef="let element" class="container-padding faculty_pad_right"> 
-                    <div>
-                      <span  class="faculty-assigned-0 ">{{element.device_UUID}}</span>
-                    </div>
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="mac">
-              <th mat-header-cell *matHeaderCellDef id="hasaa"> MAC Address </th>
-              <td mat-cell *matCellDef="let element; let i = index;">
-                <span id = courseCode-{{i}}>{{element.device_Address}}</span>
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="location">
-              <th mat-header-cell *matHeaderCellDef id="courseCode"> Location</th>
-              <td mat-cell *matCellDef="let element; let i = index;">
-                <span id = courseCode-{{i}}>{{element.device_Location}}</span>
-              </td>
-            </ng-container>
-    
-            <ng-container matColumnDef="status">
-              <th mat-header-cell *matHeaderCellDef id="sectionNumber"> Status</th>
-              <td mat-cell *matCellDef="let element; let i = index;">
-                <span id = sectionNumber-{{i}}>{{getDeviceStatus(element)}}</span>
-              </td>
-            </ng-container>
-    
-            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" id="no-course-header"></tr>
-            <tr mat-row *matRowDef="let element; let row; columns: displayedColumns;" class="element-row"></tr>
-          </table>
+                <h1>Device Dashboard</h1>
         </div>
-      </div>
-
+    </div>
+    <!-- <div class="card-container"> -->
+        <div class="row">
+            <div class="col-md-4">
+                <button mat-stroked-button color="primary" class="card" (click)="getAllAvailableDevices()">
+                    <span>Refersh Devices</span>
+                </button>
+            </div>
+            <div class="col-md-4">
+                <button mat-stroked-button color="primary" class="card" (click)="addDevices()">
+                    <span>Add devices</span>
+                </button>
+            </div>
+            <div class="col-md-4">
+                <button mat-stroked-button color="primary" class="card" (click)="gotoUserStatus()">
+                    <span><b>View Map</b></span>
+                </button>
+            </div>
+        </div>
+    <!-- </div> -->
+    <div id="content">
+        <div class="row">
+            <div class="col-md-12">
+              <div *ngIf="!hasData">
+                <mat-card class="pad-20">No devices to display</mat-card>
+              </div>
+              <table mat-table [dataSource]="dataSource" class="table-width" id="reports-data-table" *ngIf="hasData" >
+                <ng-container matColumnDef="device_name">
+                  <th mat-header-cell *matHeaderCellDef id="device_name">Device Name </th>
+                  <td mat-cell *matCellDef="let element" class="container-padding faculty_pad_right"> 
+                        <div>
+                          <span  class="faculty-assigned-0 ">{{element.device_name}}</span>
+                        </div>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="uuid">
+                  <th mat-header-cell *matHeaderCellDef id="uuid">UUID </th>
+                  <td mat-cell *matCellDef="let element" class="container-padding faculty_pad_right"> 
+                        <div>
+                          <span  class="faculty-assigned-0 ">{{element.device_UUID}}</span>
+                        </div>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="mac">
+                  <th mat-header-cell *matHeaderCellDef id="hasaa"> MAC Address </th>
+                  <td mat-cell *matCellDef="let element; let i = index;">
+                    <span id = courseCode-{{i}}>{{element.device_Address}}</span>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="location">
+                  <th mat-header-cell *matHeaderCellDef id="courseCode"> Location</th>
+                  <td mat-cell *matCellDef="let element; let i = index;">
+                    <span id = courseCode-{{i}}>{{element.device_Location}}</span>
+                  </td>
+                </ng-container>
+        
+                <ng-container matColumnDef="status">
+                  <th mat-header-cell *matHeaderCellDef id="sectionNumber"> Status</th>
+                  <td mat-cell *matCellDef="let element; let i = index;">
+                    <span id = sectionNumber-{{i}}>{{getDeviceStatus(element)}}</span>
+                  </td>
+                </ng-container>
+        
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" id="no-course-header"></tr>
+                <tr mat-row *matRowDef="let element; let row; columns: displayedColumns;" class="element-row"></tr>
+              </table>
+            </div>
+          </div>
+    </div>
 </div>

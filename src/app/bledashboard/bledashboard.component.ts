@@ -75,7 +75,7 @@ export class BLEDashboardComponent implements OnInit {
 
   addDevices(){
     this.showAddDevice = true;
-    const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
+    const dialogRef = this.dialog.open(AddDeviceDialog, {
       width: '250px',
       data: new Device()
     });
@@ -91,12 +91,12 @@ export class BLEDashboardComponent implements OnInit {
   selector: 'add-device-dialog',
   templateUrl: 'add-device-dialog.html',
 })
-export class DialogOverviewExampleDialog {
+export class AddDeviceDialog {
 
   editForm: FormGroup;
 
   constructor(private bleDashboardService: BLEDasboardService,
-    public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
+    public dialogRef: MatDialogRef<AddDeviceDialog>,
     @Inject(MAT_DIALOG_DATA) public data: Device,
     private formBuilder: FormBuilder, 
     private router: Router, 
@@ -113,6 +113,10 @@ export class DialogOverviewExampleDialog {
     });
   }
   onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+  closeDialog(): void {
     this.dialogRef.close();
   }
 

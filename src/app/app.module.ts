@@ -3,7 +3,7 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA  } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { BLEDashboardComponent } from './bledashboard/bledashboard.component';
+import { AddDeviceDialog, BLEDashboardComponent } from './bledashboard/bledashboard.component';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 import { ViewMapComponent } from './view-map/view-map.component';
@@ -16,7 +16,8 @@ import { AppMaterialModule } from './app-material/app-material.module';
   declarations: [
     AppComponent,
     BLEDashboardComponent,
-    ViewMapComponent
+    ViewMapComponent,
+    AddDeviceDialog
   ],
   imports: [
     BrowserModule,
