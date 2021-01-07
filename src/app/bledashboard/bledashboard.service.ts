@@ -17,6 +17,7 @@ export class BLEDasboardService
 
     private devicesUrl = baseAPI +'/available-devices';
     private add_device_url = baseAPI+'/add-device';
+    private update_device_url = baseAPI+'/edit-device';
     
     constructor(private http: HttpClient) {}
 
@@ -39,6 +40,17 @@ export class BLEDasboardService
         
         return this.http
         .post(this.add_device_url, {params})
+        .pipe(
+            map((data: any[]) => {
+                return data;
+            })
+        )
+        .pipe(catchError(error => BLEDasboardService._handleError(error)));
+    }
+    updateDevice(params: any): Observable<any> {
+        
+        return this.http
+        .post(this.update_device_url, {params})
         .pipe(
             map((data: any[]) => {
                 return data;

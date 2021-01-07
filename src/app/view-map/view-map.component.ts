@@ -50,6 +50,8 @@ export class ViewMapComponent implements OnInit {
   renderer: any;
   img1 = new Image();
   updateSubscription: Subscription;
+  history: any[] = [];
+  hasData:boolean = true;
   constructor(private viewmapService : ViewMapService,
     private router: Router, 
     private route: ActivatedRoute) { }
@@ -69,14 +71,24 @@ export class ViewMapComponent implements OnInit {
     this.manContext = (this.manCanvas.nativeElement as HTMLCanvasElement).getContext('2d');
     this.drawBuildingMap();
       // TODO: fetch the details auto refresh
-    this.checkUserPosition();
+	this.checkUserPosition();
+	this.getLocationHistory();
     this.startAutoReferesh();
   }
 
   startAutoReferesh() {
       this.updateSubscription = interval(30000).subscribe(val => {
-        this.checkUserPosition();
+		this.checkUserPosition();
+		this.getLocationHistory();
       });
+  }
+
+  checkLength(){
+	  console.log("history length : ",this.history.length> 0);
+	  if(this.history.length > 0){
+		  return true;
+	  }
+	  return false;
   }
   // /**
   //  * Draws something using the context we obtained earlier on
@@ -119,6 +131,19 @@ export class ViewMapComponent implements OnInit {
 			}	
 		);
 		
+  }
+
+  getLocationHistory(){
+	  console.log("getting locaiton history");
+	this.viewmapService.getHistory().subscribe(
+		(data) => {
+			this.history = data;
+			if(data.length > 0){
+				this.hasData =true;
+			}
+		  	console.log("History : ", data);
+		}	
+	);
   }
   
   goBack(){

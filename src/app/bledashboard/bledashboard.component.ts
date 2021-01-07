@@ -15,7 +15,7 @@ export class BLEDashboardComponent implements OnInit {
   allDevices: any[] = [];
   editForm: FormGroup;
   showAddDevice: boolean;
-  displayedColumns = ['device_name', 'uuid', 'mac', 'location', 'status'];
+  displayedColumns = ['device_name', 'uuid', 'mac', 'location', 'status', 'action'];
   dataSource : MatTableDataSource<any> = new MatTableDataSource();
   hasData: boolean;
   constructor(private bleDashboardService: BLEDasboardService,
@@ -33,6 +33,20 @@ export class BLEDashboardComponent implements OnInit {
       device_address: ['', Validators.required],
       xcoordinate: ['', Validators.required],
       ycoordinate: ['', Validators.required],
+    });
+  }
+
+  editDevice(element, i){
+    console.log("Element : ",element);
+    this.showAddDevice = true;
+    const dialogRef = this.dialog.open(AddDeviceDialog, {
+      width: '250px',
+      data: element
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed : ',result);
+      //  = result;
     });
   }
 
@@ -94,22 +108,29 @@ export class BLEDashboardComponent implements OnInit {
 export class AddDeviceDialog {
 
   editForm: FormGroup;
-
+  isEdit: boolean = false;
   constructor(private bleDashboardService: BLEDasboardService,
     public dialogRef: MatDialogRef<AddDeviceDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: Device,
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private formBuilder: FormBuilder, 
     private router: Router, 
     private route: ActivatedRoute) {}
 
   ngOnInit(){
+    console.log("Device : ",this.data);
+    let editDevice = this.data;
+    if(editDevice.device_UUID){
+      this.isEdit = true;
+    } else {
+      this.isEdit = false;
+    }
     this.editForm = this.formBuilder.group({
-      device_name: ['', Validators.required],
-      uuid: ['', Validators.required],
-      location: ['', Validators.required],
-      device_address: ['', Validators.required],
-      xcoordinate: ['', Validators.required],
-      ycoordinate: ['', Validators.required],
+      device_name: [editDevice.device_name, Validators.required],
+      uuid: [editDevice.device_UUID, Validators.required],
+      location: [editDevice.location, Validators.required],
+      device_address: [editDevice.device_Address, Validators.required],
+      xcoordinate: [editDevice.xcoordinate, Validators.required],
+      ycoordinate: [editDevice.ycoordinate, Validators.required],
     });
   }
   onNoClick(): void {
@@ -127,11 +148,24 @@ export class AddDeviceDialog {
     if(deviceData.uuid == ''){
       return;
     }
-    this.bleDashboardService.addDevice(this.editForm.value).subscribe(
-      (data: any) => {
-        console.log("response for adding device : ",data);
-      });
-  }
+    if(this.isEdit){
+      this.bleDashboardService.updateDevice(this.editForm.value).subscribe(
+        (data: any) => {
+          console.log("response for adding device : ",data);
+          this.dialogRef.close();
+        });
+        this.closeDialog();
+    }
+     else {
+        this.bleDashboardService.addDevice(this.editForm.value).subscribe(
+          (data: any) => {
+            console.log("response for adding device : ",data);
+            this.dialogRef.close();
+          });
+          this.closeDialog();
+      }
+    }
+    
 
 }
 

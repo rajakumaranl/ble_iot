@@ -21,7 +21,7 @@ router.get('/available-devices', function(req, res, next) {
   const con = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'root@123',
+    password: 'abcd',
     database: 'iot',
   });
 
@@ -38,7 +38,7 @@ router.get('/available-devices', function(req, res, next) {
       console.log("Result: " + result);
       res.status(200).send(result);
     });
-    con.end((err));
+    // con.end((err));
   });
 })
 
@@ -46,7 +46,7 @@ router.get('/device-position', function(req, res, next) {
   const con = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'root@123',
+    password: 'abcd',
     database: 'iot',
   });
 
@@ -71,7 +71,7 @@ router.post('/add-device', function(req, res, next) {
   const con = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'root@123',
+    password: 'abcd',
     database: 'iot',
   });
   var device = req.body.params;
@@ -96,8 +96,62 @@ router.post('/add-device', function(req, res, next) {
       res.status(200).send(result);
     });
   });
-  con.end((err));
+  // con.end((err));
 });
 
+router.post('/edit-device', function(req, res, next) {
+  const con = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: 'abcd',
+    database: 'iot',
+  });
+  var device = req.body.params;
+  console.log("Device Data : ",device);
+  var xcoordinate = device.xcoordinate;
+  var ycoordinate = device.ycoordinate;
+  var location = device.location;
+  let mac_address = device.device_address;
+  let uuid = device.uuid;
+  let device_name = device.device_name;
+  var time =  moment(new Date()).format('YYYY-MM-DD');
+  con.connect((err) => {
+    if(err){
+      console.log('Error connecting to Db ========> ', err);
+      return;
+    }
+    var uq = 'update iot.device SET device_name="'+device_name+'", device_Address="'+mac_address+'", device_Location="'+location+'", Modified_By=1, Modified_Date="'+time+'", End_Date=NULL, xcoordinate='+xcoordinate+', ycoordinate='+ycoordinate+' WHERE device_UUID ="'+uuid+'"';
+    con.query(uq, function (err, result) {
+      if(err) throw err;
+      console.log("Updated device : " + result);
+      res.status(200).send(result);
+    });
+  });
+  // con.end((err));
+});
+
+router.get('/device-position/history', function(req, res, next) {
+  const con = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: 'abcd',
+    database: 'iot',
+  });
+
+  con.connect((err) => {
+    if(err){
+      console.log('Error connecting to Db ========> ', err);
+      return;
+    }
+    // var updateAudit = await pool.query('INSERT INTO public.product_audit(product_id, mrp, price , module_name, operation , updated_json , operation_done_by) VALUES ($1, $2, $3, $4, $5, $6, $7)',[request.product_id, request.mrp, request.sellingPrice, request.module_name,'UPDATED',updateJson,request.changed_by])
+    con.query('SELECT * from iot.userpresence where End_Date IS NOT NULL order by userPresence_id  DESC LIMIT  20;', function (err, result) {
+      if (err)
+        throw err;
+      console.log("resuls for presence : ",result);
+      res.status(200).send(result);
+    });
+  });
+
+})
 
 module.exports = router;

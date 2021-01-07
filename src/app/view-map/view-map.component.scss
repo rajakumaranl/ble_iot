@@ -236,3 +236,44 @@ p {
     display: inline-grid;
     font-size: 25px;
   }
+
+
+.mat-pad {
+  padding: 10px !important;
+}
+
+.font-grey {
+  color: #999999 !important;
+}
+
+.card-border {
+  border-left: 2px solid #d8d8d8;
+}
+
+.card-margin {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.m-t-1 {
+  margin-top: 15px;
+}
+
+.circle {
+  display: inline-block;
+  vertical-align: middle;
+  width: 18px;
+  height: 18px;
+  background-color: #03A9F4; 
+  // background-color: mat-color($default-primary);
+  /* border: 1px solid #b2b2b2; */
+  position: absolute;
+  left: -10px;
+  top: 45%;
+  border-radius: 50%;
+}
+
+.circle-container {
+  width: 1px;
+  position: relative;
+}

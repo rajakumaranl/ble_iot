@@ -16,7 +16,7 @@ export class ViewMapService
 {
 
     private devicesUrl = baseAPI +'/device-position';
-    
+    private devicesHistoryUrl = baseAPI +'/device-position/history';
     constructor(private http: HttpClient) {}
 
     private static _handleError(err: HttpErrorResponse | any): Observable<any> {
@@ -26,6 +26,17 @@ export class ViewMapService
     getPosition() {
         return this.http
             .get(this.devicesUrl)
+            .pipe(
+                map((data: any[]) => {
+                    return data;
+                })
+            )
+            .pipe(catchError(error => ViewMapService._handleError(error)));
+    }
+
+    getHistory(){
+        return this.http
+            .get(this.devicesHistoryUrl)
             .pipe(
                 map((data: any[]) => {
                     return data;

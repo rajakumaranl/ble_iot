@@ -31,4 +31,63 @@
         <canvas #manCanvas width="1000" height="600"
             style="position: absolute; top: 0; z-index: 1;"></canvas>
     </div>
+    <div class="mat-pad">
+        
+        <div class='row'>
+            <div class="col-md-12">
+               <h1>History</h1>
+              </div>
+        </div>
+        <div class="row mat-pad">
+            <div class="col-12 mat-pad">
+                <div *ngIf="hasData">
+                    <!-- <ul>
+                        <li *ngFor="let presence of history">
+                            <mat-card class="mat-pad">
+                                <div class="row">
+                                    <div class="col-5 font-grey">
+                                        Was in 
+                                    </div>
+                                    <div class="col-7" >
+                                        {{presence.userlocation}}
+                                    </div>
+                                </div>
+                            </mat-card>
+                        </li>
+                      </ul> -->
+                    <div class="row card-border" *ngFor="let presence of history; let i = index">
+                        <div class="circle-container">
+                            <div class="circle">
+    
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-8 col-lg-6 card-margin">
+                            <mat-card class="mat-pad">
+                                 <large class="block text-muted"><i class="fa fa-calendar-alt">Date : </i>
+                                    {{presence.Created_Date | date}} &nbsp;{{presence.Created_Date  |
+                                        date:'mediumTime'}}</large>
+                                <div class="row">
+                                    <!-- <div class="col-5 font-grey">
+                                        Was in 
+                                    </div> -->
+                                    <div class="col-7" >
+                                        {{presence.userlocation}}
+                                    </div>
+                                </div>
+                            </mat-card>
+                        </div>
+    
+                    </div>
+                </div>
+                <!-- <ng-template #ElseBlock>
+                    <div class="row m-t-1">
+                        <div class="col-5 card-margin">
+                            <mat-card class="mat-pad" id="audit-not-found"> No History Found
+                            </mat-card>
+                        </div>
+                    </div>
+                </ng-template> -->
+            </div>
+        </div>
+    </div>
 </div>

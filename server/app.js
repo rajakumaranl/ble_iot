@@ -55,7 +55,7 @@ async function onAppStartUp() {
     const con = mysql.createConnection({
       host: 'localhost',
       user: 'root',
-      password: 'root@123',
+      password: 'abcd',
       database: 'iot',
     });
 
@@ -153,7 +153,7 @@ client.on('message', (topic, message) => {
 function handleDeviceConnected (message) {
   console.log('device connected status %s', message)
   let receviceData = JSON.parse(message);
-  var uuid =   receviceData.device_UUID;
+  var uuid =  receviceData.device_UUID;
   let t = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
   console.log("================ T ================== : ",t);
   var time =  moment(t).format('YYYY-MM-DD hh:mm:ss');
@@ -164,7 +164,7 @@ function handleDeviceConnected (message) {
   const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'root@123',
+    password: 'abcd',
     database: 'iot',
   });
 
@@ -173,14 +173,39 @@ function handleDeviceConnected (message) {
       console.log('Error connecting to Db ========> ', err);
       return;
     }
+    console.log("new device found  : ",receviceData.device_UUID);
     var qur = 'SELECT * from iot.device WHERE iot.device.device_UUID = "'+uuid+'";';
     connection.query(qur, [true], (error, results) => {
       if (error) {
-        return console.error(error.message);
+        console.log("Error ",error.message);
       }
+
+
       if(results.length == 0){
+        console.log("not already exists ");
+        var insertDevice = 'INSERT INTO iot.device (device_UUID,device_name,device_Address,device_Location,Created_By,Created_Date,Modified_By,Modified_Date,End_Date,xcoordinate,ycoordinate) '
+        +'values ("'+uuid+'","'+receviceData.device_Name+'","'+receviceData.device_Address+'","Development room 1",1,"'+time+'",NULL,NULL,NULL,500,400)';
+        // 'WHERE iot.device.device_UUID = "'+uuid+'";';
+
+        connection.query(insertDevice, function (err, result) {
+            if (err) throw err;
+            
+            return console.log("Device added successfully ");
+              // var insertQuery ='INSERT INTO iot.userpresence (user_id,device_id,Created_By,Created_Date,End_Date,xcoordinate,ycoordinate,userlocation) '
+              // +'values (1,"'+deviceId+'", 1 ,"' +time+'", NULL, '+ xcoordinate+', '+ ycoordinate+', "'+ location+'")';
+              // console.log('Connection established to fetch devices : ',insertQuery);
+              
+              // connection.query(insertQuery, function (err, result) {
+              //   if (err) throw err;
+                
+              //   console.log("New Device discovered and added to devices list ");
+              // });
+          
+        });
+        // return console.log("Device added successfully ");
         return;
       }
+
       var device = results[0];
       var xcoordinate = device.xcoordinate;
       var ycoordinate = device.ycoordinate;
