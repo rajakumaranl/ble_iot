@@ -50,6 +50,7 @@ export class ViewMapComponent implements OnInit {
   renderer: any;
   img1 = new Image();
   updateSubscription: Subscription;
+  
   constructor(private viewmapService : ViewMapService,
     private router: Router, 
     private route: ActivatedRoute) { }
@@ -75,21 +76,25 @@ export class ViewMapComponent implements OnInit {
 
   startAutoReferesh() {
       this.updateSubscription = interval(30000).subscribe(val => {
-        this.checkUserPosition();
+		this.drawBuildingMap();
+		this.checkUserPosition();
+		
       });
   }
   // /**
   //  * Draws something using the context we obtained earlier on
   //  */
-  // private draw() {
-  //   this.context.font = "30px Arial";
-  //   this.context.textBaseline = 'middle';
-  //   this.context.textAlign = 'center';
+  private draw(x,y) {
+    this.context.font = "16px Arial";
+    this.context.textBaseline = 'middle';
+    this.context.textAlign = 'center';
 
-  //   const x = (this.canvasEl.nativeElement as HTMLCanvasElement).width / 2;
-  //   const y = (this.canvasEl.nativeElement as HTMLCanvasElement).height / 2;
-  //   this.context.fillText("@realappie", x, y);
-  // }
+    // const x = (this.myCanvas.nativeElement as HTMLCanvasElement).width / 2;
+	// const y = (this.myCanvas.nativeElement as HTMLCanvasElement).height / 2;
+	const xp = parseInt(x+25);
+	const yp = parseInt(y);
+    this.context.fillText("Hey, I'm Here", 650, 150, 70);
+  }
 
   ngOnDestroy() {
     this.updateSubscription.unsubscribe();
@@ -97,29 +102,30 @@ export class ViewMapComponent implements OnInit {
   
 	checkUserPosition() {
 		
-		var x = 30;
-    var y = 20;
+		var x: number = 30;
+		var y: number = 20;
 
-    // this.context.fillText("@realappie", x, y);
+    	// this.context.fillText("@realappie", x, y);
 
 		this.viewmapService.getPosition().subscribe(
       (data) => {
 				// responseJson.forEach(position, (key, value) {
-          console.log("DATA ",data[0]);
-          if(data.length == 0){
-            return;
-          }
-          let position = data[0];
-					x = position.xcoordinate;
-					y = position.ycoordinate;
-        // });
-        console.log("inside fn X = "+x+" Y = "+y)
-        this.positionUser(x, y);
-        // this.drawBuildingMap();
-			}	
-		);
-		
-  }
+			console.log("DATA ",data[0]);
+			if(data.length == 0){
+				return;
+			}
+			let position = data[0];
+			x = position.xcoordinate;
+			y = position.ycoordinate;
+			// });
+			console.log("inside fn X = "+x+" Y = "+y)
+			this.positionUser(x, y);
+			
+			// this.draw(x, y);
+			// this.drawBuildingMap();
+				}	
+			);
+  	}
   
   goBack(){
     this.router.navigate(['/view-devices']);
@@ -127,23 +133,52 @@ export class ViewMapComponent implements OnInit {
 	
 	positionUser(x, y) {
 
-      this.img1.onload = ()=> {
-		// this.manContext.clearRect(this.x, this.y, 30,48);
-		this.manContext.clearRect(0,0, 1000, 600);
-        this.x = x;
-        this.y = y;
-		this.manContext.drawImage(this.img1, x, y, 30, 48);
-		this.textX = x+25;
-		let rect = y+15;
-		this.textY = y+15;
-		this.manContext.fillStyle = "#FF0000";
-		this.manContext.font = "16px Arial";
-		this.manContext.fillText("Hey, I'm Here", this.textX, this.textY, 70);
-      }
-      this.img1.src = '../assets/images/man.png';
-  }
+			this.img1.src = '../assets/images/man.png';
+			this.img1.onload = ()=> {
+			this.manContext.clearRect(this.x, this.y, 30,48);
+			this.manContext.clearRect(0,0, 1000, 600);
+			this.x = x;
+			this.y = y;
+			this.manContext.drawImage(this.img1, x, y, 30, 48);
+			this.textX = x+25;
+			let rect = y+15;
+			this.textY = y+15;
+			this.manContext.fillStyle = "#FF0000";
+			this.manContext.font = "16px Arial";
+			console.log("Im here ");
+			this.manContext.fillText("Hey, I'm Here", this.textX, this.textY, 70);
+		}
+		
+	}
+
+	// positionUser(x, y) {
+	// 	this.textX = x+25;
+	// 	this.textY = y+15;
+	// 	console.log("Im here : ", this.textX, ", ", this.textY);
+	// 	// this.context.fillText("Hey, I'm Here", this.textX.valueOf(), this.textY.valueOf(), 70);
+		
+	// 	this.img1.src = '../assets/images/man.png';
+	// 	this.img1.onload = ()=> {
+	// 		this.manContext.clearRect(this.x, this.y, 30,48);
+	// 		this.manContext.clearRect(0,0, 1000, 600);
+	// 		this.x = 650;
+	// 		this.y = y;
+
+	// 		this.manContext.drawImage(this.img1, 650, 150, 30, 48);
+	// 		this.textX = x+25;
+	// 		// let rect = y+15;
+	// 		this.textY = y+15;
+	// 		this.manContext.fillStyle = "#FF0000";
+	// 		this.manContext.font = "16px Arial";
+	// 		// console.log("Im here ");
+	// 		this.manContext.fillText("Hey, I'm Here", this.textX.valueOf(), this.textY.valueOf(), 70);
+			
+	// 	}
+	// 	this.img1.src = '../assets/images/man.png';
+	// }
 
   drawBuildingMap(){
+	this.context.clearRect(0,0, 1000, 600);
 		// var canvas = document.getElementById('myCanvas');
 		// var context0 = canvas.getContext('2d');
     this.context.font = "16px Arial";

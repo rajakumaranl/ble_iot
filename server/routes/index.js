@@ -21,7 +21,7 @@ router.get('/available-devices', function(req, res, next) {
   const con = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'root@123',
+    password: 'abcd',
     database: 'iot',
   });
 
@@ -46,7 +46,7 @@ router.get('/device-position', function(req, res, next) {
   const con = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'root@123',
+    password: 'abcd',
     database: 'iot',
   });
 
@@ -71,7 +71,7 @@ router.post('/add-device', function(req, res, next) {
   const con = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'root@123',
+    password: 'abcd',
     database: 'iot',
   });
   var device = req.body.params;
@@ -96,7 +96,7 @@ router.post('/add-device', function(req, res, next) {
       res.status(200).send(result);
     });
   });
-  con.end((err));
+  // con.end((err));
 });
 
 

@@ -55,7 +55,7 @@ async function onAppStartUp() {
     const con = mysql.createConnection({
       host: 'localhost',
       user: 'root',
-      password: 'root@123',
+      password: 'abcd',
       database: 'iot',
     });
 
@@ -164,7 +164,7 @@ function handleDeviceConnected (message) {
   const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'root@123',
+    password: 'abcd',
     database: 'iot',
   });
 
@@ -188,10 +188,12 @@ function handleDeviceConnected (message) {
       let deviceId = device.device_id;
 
       //make the old locaiton false
-      var deleteQuery ='UPDATE iot.userpresence SET  End_Date = "'+time+'"';
+      var deleteQuery ='UPDATE iot.userpresence SET End_Date = "'+time+'"';
       console.log('MAKE THE OLD POSITION AS INVALID : ',deleteQuery);
       connection.query(deleteQuery, function (err, result) {
-        if (err) throw err;
+        if (err) {
+          console.log("No device found : ");
+        };
       });
 
       //inserting the current position of the device
