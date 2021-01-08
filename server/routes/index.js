@@ -21,7 +21,7 @@ router.get('/available-devices', function(req, res, next) {
   const con = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'abcd',
+    password: 'root@123',
     database: 'iot',
   });
 
@@ -43,10 +43,12 @@ router.get('/available-devices', function(req, res, next) {
 })
 
 router.get('/device-position', function(req, res, next) {
+
+  var mac_address = req.query.mac_address;
   const con = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'abcd',
+    password: 'root@123',
     database: 'iot',
   });
 
@@ -55,8 +57,8 @@ router.get('/device-position', function(req, res, next) {
       console.log('Error connecting to Db ========> ', err);
       return;
     }
-    // var updateAudit = await pool.query('INSERT INTO public.product_audit(product_id, mrp, price , module_name, operation , updated_json , operation_done_by) VALUES ($1, $2, $3, $4, $5, $6, $7)',[request.product_id, request.mrp, request.sellingPrice, request.module_name,'UPDATED',updateJson,request.changed_by])
-    con.query('SELECT xcoordinate, ycoordinate from iot.userpresence where End_Date IS NULL order by userPresence_id  DESC LIMIT  1;', function (err, result) {
+    
+    con.query('SELECT xcoordinate, ycoordinate from iot.device where device_Address = "'+mac_address+'" LIMIT  1;', function (err, result) {
       if (err)
         throw err;
       console.log("resuls for presence : ",result);
@@ -71,7 +73,7 @@ router.post('/add-device', function(req, res, next) {
   const con = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'abcd',
+    password: 'root@123',
     database: 'iot',
   });
   var device = req.body.params;
@@ -103,7 +105,7 @@ router.post('/edit-device', function(req, res, next) {
   const con = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'abcd',
+    password: 'root@123',
     database: 'iot',
   });
   var device = req.body.params;
@@ -130,11 +132,35 @@ router.post('/edit-device', function(req, res, next) {
   // con.end((err));
 });
 
-router.get('/device-position/history', function(req, res, next) {
+router.delete('/remove-devices', function(req, res, next) {
   const con = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'abcd',
+    password: 'root@123',
+    database: 'iot',
+  });
+  con.connect((err) => {
+    if(err){
+      console.log('Error connecting to Db ========> ', err);
+      return;
+    }
+    var deleteQuery = 'DELETE FROM iot.device';
+    con.query(deleteQuery, function (err, result) {
+      if(err) throw err;
+      console.log("Removed all devices : " + result);
+      res.status(200).send(result);
+    });
+  });
+  // con.end((err));
+});
+
+router.get('/device-position/history', function(req, res, next) {
+  var mac_address = req.query.mac_address;
+  
+  const con = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: 'root@123',
     database: 'iot',
   });
 
@@ -143,8 +169,8 @@ router.get('/device-position/history', function(req, res, next) {
       console.log('Error connecting to Db ========> ', err);
       return;
     }
-    // var updateAudit = await pool.query('INSERT INTO public.product_audit(product_id, mrp, price , module_name, operation , updated_json , operation_done_by) VALUES ($1, $2, $3, $4, $5, $6, $7)',[request.product_id, request.mrp, request.sellingPrice, request.module_name,'UPDATED',updateJson,request.changed_by])
-    con.query('SELECT * from iot.userpresence where End_Date IS NOT NULL order by userPresence_id  DESC LIMIT  20;', function (err, result) {
+    
+    con.query('SELECT * from iot.userpresence join iot.device on device.device_id = userpresence.device_id where device.device_Address = "'+mac_address+'" and userpresence.End_Date IS NOT NULL order by userPresence_id  DESC LIMIT  20;', function (err, result) {
       if (err)
         throw err;
       console.log("resuls for presence : ",result);

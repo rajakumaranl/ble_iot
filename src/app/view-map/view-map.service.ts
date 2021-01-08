@@ -23,9 +23,12 @@ export class ViewMapService
         return throwError(err.error.message);
     }
 
-    getPosition() {
+    getPosition(mac_address: string) {
+        const params = new HttpParams()
+        .set("mac_address",mac_address)
+
         return this.http
-            .get(this.devicesUrl)
+            .get(this.devicesUrl, {params})
             .pipe(
                 map((data: any[]) => {
                     return data;
@@ -34,9 +37,12 @@ export class ViewMapService
             .pipe(catchError(error => ViewMapService._handleError(error)));
     }
 
-    getHistory(){
+    getHistory(mac_address: string){
+        const params = new HttpParams()
+        .set("mac_address",mac_address)
+
         return this.http
-            .get(this.devicesHistoryUrl)
+            .get(this.devicesHistoryUrl, {params})
             .pipe(
                 map((data: any[]) => {
                     return data;

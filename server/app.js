@@ -55,7 +55,7 @@ async function onAppStartUp() {
     const con = mysql.createConnection({
       host: 'localhost',
       user: 'root',
-      password: 'abcd',
+      password: 'root@123',
       database: 'iot',
     });
 
@@ -154,6 +154,7 @@ function handleDeviceConnected (message) {
   console.log('device connected status %s', message)
   let receviceData = JSON.parse(message);
   var uuid =  receviceData.device_UUID;
+  var mac_address = receviceData.device_Address
   let t = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
   console.log("================ T ================== : ",t);
   var time =  moment(t).format('YYYY-MM-DD hh:mm:ss');
@@ -161,10 +162,35 @@ function handleDeviceConnected (message) {
   if(uuid ==''){
     return;
   }
+  var ycoordinate = 100;
+  var location = receviceData.user_Name;
+
+  if(location =='Conference_room'){
+    xcoordinate = 700;
+    ycoordinate = 150;
+  } else if(location =='Dev_Room_1'){
+    xcoordinate = 500;
+    ycoordinate = 300;
+  } else if(location =='Cafeteria'){
+    xcoordinate = 800;
+    ycoordinate = 150;
+  } else if(location =='Reception'){
+    xcoordinate = 800;
+    ycoordinate = 300;
+  } else if(location =='Dev_Room_2'){
+    xcoordinate = 500;
+    ycoordinate = 150;
+  } else if(location =='Dev_Room_4'){
+    xcoordinate = 300;
+    ycoordinate = 150;
+  } else if(location =='IT_Support'){
+    xcoordinate = 700;
+    ycoordinate = 300;
+  }
   const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'abcd',
+    password: 'root@123',
     database: 'iot',
   });
 
@@ -174,43 +200,70 @@ function handleDeviceConnected (message) {
       return;
     }
     console.log("new device found  : ",receviceData.device_UUID);
-    var qur = 'SELECT * from iot.device WHERE iot.device.device_UUID = "'+uuid+'";';
+    var qur = 'SELECT * from iot.device WHERE iot.device.device_Address = "'+mac_address+'";';
     connection.query(qur, [true], (error, results) => {
       if (error) {
         console.log("Error ",error.message);
       }
-
-
       if(results.length == 0){
-        console.log("not already exists ");
-        var insertDevice = 'INSERT INTO iot.device (device_UUID,device_name,device_Address,device_Location,Created_By,Created_Date,Modified_By,Modified_Date,End_Date,xcoordinate,ycoordinate) '
-        +'values ("'+uuid+'","'+receviceData.device_Name+'","'+receviceData.device_Address+'","Development room 1",1,"'+time+'",NULL,NULL,NULL,500,400)';
-        // 'WHERE iot.device.device_UUID = "'+uuid+'";';
-
-        connection.query(insertDevice, function (err, result) {
-            if (err) throw err;
-            
-            return console.log("Device added successfully ");
-              // var insertQuery ='INSERT INTO iot.userpresence (user_id,device_id,Created_By,Created_Date,End_Date,xcoordinate,ycoordinate,userlocation) '
-              // +'values (1,"'+deviceId+'", 1 ,"' +time+'", NULL, '+ xcoordinate+', '+ ycoordinate+', "'+ location+'")';
-              // console.log('Connection established to fetch devices : ',insertQuery);
+        console.log("not already exists 1 ");
+        var qur = 'SELECT * from iot.device WHERE iot.device.device_UUID = "'+uuid+'";';
+        connection.query(qur, [true], (error, results) => {
+          if (error) {
+            console.log("Error ",error.message);
+          }
+          if(results.length == 0){
+              console.log("not already exists 2");
+              var insertDevice = 'INSERT INTO iot.device (device_UUID,device_name,device_Address,device_Location,Created_By,Created_Date,Modified_By,Modified_Date,End_Date,xcoordinate,ycoordinate,status) '
+              +'values ("'+uuid+'","'+receviceData.device_Name+'","'+receviceData.device_Address+'","'+receviceData.user_Name+'",1,"'+time+'", NULL,NULL,NULL,'+xcoordinate+','+ycoordinate+',1)';
               
-              // connection.query(insertQuery, function (err, result) {
-              //   if (err) throw err;
-                
-              //   console.log("New Device discovered and added to devices list ");
-              // });
-          
+              connection.query(insertDevice, function (err, result) {
+                if (err) throw err;
+                return console.log("Device added successfully ");          
+            });
+          } else {
+            console.log("Updating location: 2 ", receviceData.user_Name);
+            //make the device status online
+            connection.query("UPDATE iot.device SET device_Location='"+receviceData.user_Name+"', xcoordinate="+xcoordinate+", ycoordinate="+ycoordinate+", status = 1 WHERE device_UUID = '"+ uuid+"';", function (err, result) {
+              if (err) throw err;
+              console.log("Update device status Result: " + result);
+            });
+          }
         });
-        // return console.log("Device added successfully ");
         return;
+      } else {
+          console.log("Updating location: 3 ", receviceData.user_Name);
+          //make the device status online
+          connection.query("UPDATE iot.device SET device_Location='"+receviceData.user_Name+"',xcoordinate="+xcoordinate+", ycoordinate="+ycoordinate+", status = 1 WHERE device_Address = '"+ mac_address+"';", function (err, result) {
+            if (err) throw err;
+            console.log("Update device status Result: " + result);
+          });
+        
       }
 
       var device = results[0];
-      var xcoordinate = device.xcoordinate;
-      var ycoordinate = device.ycoordinate;
-      var location = device.device_Location;
+      var location = receviceData.user_Name;
       let deviceId = device.device_id;
+
+      if(location =='Conference_room'){
+        xcoordinate = 300;
+        ycoordinate = 150;
+      } else if(location =='Dev_Room'){
+        xcoordinate = 500;
+        ycoordinate = 300;
+      } else if(location =='Cafeteria'){
+        xcoordinate = 700;
+        ycoordinate = 150;
+      } else if(location =='Reception'){
+        xcoordinate = 700;
+        ycoordinate = 300;
+      } 
+      console.log("Location : ",location);
+      //make the device status online
+      connection.query('UPDATE iot.device SET device_Location="'+location+'", xcoordinate='+xcoordinate+', ycoordinate='+ycoordinate+', status = 1 WHERE device_Address = "'+ mac_address+'"', function (err, result, fields) {
+        if (err) throw err;
+        console.log("Update device status Result: " + result);
+      });
 
       //make the old locaiton false
       var deleteQuery ='UPDATE iot.userpresence SET  End_Date = "'+time+'"';
@@ -222,19 +275,26 @@ function handleDeviceConnected (message) {
       //inserting the current position of the device
       var insertQuery ='INSERT INTO iot.userpresence (user_id,device_id,Created_By,Created_Date,End_Date,xcoordinate,ycoordinate,userlocation) '
                     +'values (1,'+deviceId+', 1 ,"' +time+'", NULL, '+ xcoordinate+', '+ ycoordinate+', "'+ location+'")';
-      console.log('Connection established to fetch devices : ',insertQuery);
+      
       connection.query(insertQuery, function (err, result) {
         if (err) throw err;
-      });
-
-      connection.query("UPDATE device SET status = 1 WHERE device_UUID = '"+ uuid+"'", function (err, result, fields) {
-        if (err) throw err;
-        console.log("Update device status Result: " + result);
-      });
+        console.log('Updated device status presence : ');
+      });      
     });
-    // connection.end((err));
   });
   connected = (message.toString() === 'true')
+}
+
+function isDeviceExists(connection){
+  var qur = 'SELECT * from iot.device WHERE iot.device.device_UUID = "'+uuid+'";';
+    connection.query(qur, [true], (error, results) => {
+      if (error) {
+        console.log("Error ",error.message);
+      }
+      if(results.length > 0){
+        return results;
+      }
+    });
 }
 
 function updatePresence(){

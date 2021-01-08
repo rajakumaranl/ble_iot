@@ -37,17 +37,19 @@ export class BLEDashboardComponent implements OnInit {
   }
 
   editDevice(element, i){
-    console.log("Element : ",element);
-    this.showAddDevice = true;
-    const dialogRef = this.dialog.open(AddDeviceDialog, {
-      width: '250px',
-      data: element
-    });
+    console.log("Element : ",element.device_Address);
+    sessionStorage.setItem('device', JSON.stringify(element.device_Address));
+    this.router.navigate(['/view-map']);
+    // this.showAddDevice = true;
+    // const dialogRef = this.dialog.open(AddDeviceDialog, {
+    //   width: '250px',
+    //   data: element
+    // });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed : ',result);
-      //  = result;
-    });
+    // dialogRef.afterClosed().subscribe(result => {
+    //   console.log('The dialog was closed : ',result);
+    //   //  = result;
+    // });
   }
 
   getAllAvailableDevices(){
@@ -63,10 +65,8 @@ export class BLEDashboardComponent implements OnInit {
   }
 
   getDeviceStatus(device){
-      if(device){
-        return 'Offline'
-      }
-      if(device.status){
+      console.log("Device status : ", device.status);
+      if(device.status == 1){
         return 'Online';
       } else {
         return 'Offline';
@@ -97,7 +97,17 @@ export class BLEDashboardComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed : ',result);
       //  = result;
+      this.getAllAvailableDevices();
     });
+  }
+
+  deleteDevices(){
+    console.log("Delete Device : ");
+    this.bleDashboardService.removeAllDevices().subscribe(
+      (data: any) => {
+        console.log("response for delete device : ",data);
+        this.getAllAvailableDevices();
+      });
   }
 }
 

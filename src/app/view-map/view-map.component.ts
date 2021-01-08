@@ -52,12 +52,13 @@ export class ViewMapComponent implements OnInit {
   updateSubscription: Subscription;
   history: any[] = [];
   hasData:boolean = true;
+	mac_address: any;
   constructor(private viewmapService : ViewMapService,
     private router: Router, 
     private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    
+    this.mac_address = JSON.parse(sessionStorage.getItem('device'));
   }
 
   ngAfterViewInit() {
@@ -107,14 +108,14 @@ export class ViewMapComponent implements OnInit {
     this.updateSubscription.unsubscribe();
   }
   
-	checkUserPosition() {
+checkUserPosition() {
 		
-		var x = 30;
+	var x = 30;
     var y = 20;
 
     // this.context.fillText("@realappie", x, y);
 
-		this.viewmapService.getPosition().subscribe(
+		this.viewmapService.getPosition(this.mac_address).subscribe(
       (data) => {
 				// responseJson.forEach(position, (key, value) {
           console.log("DATA ",data[0]);
@@ -135,7 +136,7 @@ export class ViewMapComponent implements OnInit {
 
   getLocationHistory(){
 	  console.log("getting locaiton history");
-	this.viewmapService.getHistory().subscribe(
+	this.viewmapService.getHistory(this.mac_address).subscribe(
 		(data) => {
 			this.history = data;
 			if(data.length > 0){
