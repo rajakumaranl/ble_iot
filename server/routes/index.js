@@ -34,8 +34,8 @@ router.get('/available-devices', function(req, res, next) {
     con.query('SELECT * from iot.device;', function (err, result) {
       if (err)
         throw err;
-
-      console.log("Result: " + result);
+      con.end();
+      // console.log("Result: " + result);
       res.status(200).send(result);
     });
     // con.end((err));
@@ -61,7 +61,8 @@ router.get('/device-position', function(req, res, next) {
     con.query('SELECT xcoordinate, ycoordinate from iot.device where device_Address = "'+mac_address+'" LIMIT  1;', function (err, result) {
       if (err)
         throw err;
-      console.log("resuls for presence : ",result);
+      // console.log("resuls for presence : ",result);
+      con.end();
       res.status(200).send(result);
     });
   });
@@ -94,7 +95,7 @@ router.post('/add-device', function(req, res, next) {
     +'values("'+uuid+'", "'+device_name+'", "'+mac_address+'", "'+location+'", 1, "'+time+'", NULL, NULL, NULL, '+xcoordinate+', '+ycoordinate+')';
     con.query(iq, function (err, result) {
       if(err) throw err;
-      console.log("Added new device : " + result);
+      // console.log("Added new device : " + result);
       res.status(200).send(result);
     });
   });
@@ -125,7 +126,8 @@ router.post('/edit-device', function(req, res, next) {
     var uq = 'update iot.device SET device_name="'+device_name+'", device_Address="'+mac_address+'", device_Location="'+location+'", Modified_By=1, Modified_Date="'+time+'", End_Date=NULL, xcoordinate='+xcoordinate+', ycoordinate='+ycoordinate+' WHERE device_UUID ="'+uuid+'"';
     con.query(uq, function (err, result) {
       if(err) throw err;
-      console.log("Updated device : " + result);
+      // console.log("Updated device : " + result);
+      con.end();
       res.status(200).send(result);
     });
   });
@@ -148,6 +150,7 @@ router.delete('/remove-devices', function(req, res, next) {
     con.query(deleteQuery, function (err, result) {
       if(err) throw err;
       console.log("Removed all devices : " + result);
+      con.end();
       res.status(200).send(result);
     });
   });
@@ -174,6 +177,7 @@ router.get('/device-position/history', function(req, res, next) {
       if (err)
         throw err;
       console.log("resuls for presence : ",result);
+      con.end();
       res.status(200).send(result);
     });
   });

@@ -157,10 +157,10 @@ function handleDeviceConnected (message) {
   var mac_address = deviceInfo.device_Address
   let t = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
   console.log("================ T ================== : ",t);
-  // var time =  moment(deviceInfo.location_Time).format('YYYY-MM-DD hh:mm:ss');
-  var time =  deviceInfo.location_Time;
-  console.log("received device UUID : ",deviceInfo.device_UUID);
-  if(uuid ==''){
+  var time =  moment(deviceInfo.location_Time).format('YYYY-MM-DD hh:mm:ss');
+  // var time =  deviceInfo.location_Time;
+
+  if(uuid =='' && mac_address == ''){
     return;
   }
   var xcoordinate = 100;
@@ -226,34 +226,38 @@ function handleDeviceConnected (message) {
         connection.query(qur1, [true], (error, results1) => {
           if (error) {
             console.log("Error ",error.message);
+            connection.end();
             return;
           }
 
           if(results1.length == 0){
-              console.log("not already exists with UUID also so creating new device");
+              console.log("not already exists with UUID also so creating new device ", uuid);
               var insertDevice = 'INSERT INTO iot.device (device_UUID,device_name,device_Address,device_Location,Created_By,Created_Date,Modified_By,Modified_Date,End_Date,xcoordinate,ycoordinate,status) '
               +'values ("'+uuid+'","'+deviceInfo.device_Name+'","'+deviceInfo.device_Address+'","'+deviceInfo.user_Name+'",1,"'+time+'", NULL,NULL,NULL,'+xcoordinate+','+ycoordinate+',1)';
               
               connection.query(insertDevice, function (err, result) {
-                if (err) throw err;
+                if (err) {console.log("Error while insert ",err);}
                 
-                var qur = 'SELECT * from iot.device WHERE device.device_UUID = "'+uuid+'" LIMIT 1;';
-                connection.query(qur, [true], (error, results) => {
+                var qur = 'SELECT * from iot.device WHERE device.device_Address = "'+deviceInfo.device_Address+'" LIMIT 1;';
+                connection.query(qur, (error, results) => {
                   if (error) {
                     console.log("Error ",error.message);
                   }
-                  device = results[0];
-                });
-                console.log("Device added successfully ");
-                //inserting the current position of the device
-                var insertQuery ='INSERT INTO iot.userpresence (user_id,device_id,Created_By,Created_Date,End_Date,xcoordinate,ycoordinate,userlocation) '
-                +'values (1,'+device.device_Id+', 1 ,"' +time+'", NULL, '+ xcoordinate+', '+ ycoordinate+', "'+ location+'")';
 
-                connection.query(insertQuery, function (err, result) {
-                if (err) throw err;
-                console.log('Updated device current position : ');
-                return;
-                }); 
+                  device = results[0];
+                  //inserting the current position of the device
+                  var insertQuery ='INSERT INTO iot.userpresence (user_id,device_id,Created_By,Created_Date,End_Date,xcoordinate,ycoordinate,userlocation) '
+                  +'values (1,'+device.device_id+', 1 ,"' +time+'", NULL, '+ xcoordinate+', '+ ycoordinate+', "'+ location+'")';
+
+                  connection.query(insertQuery, function (err, result) {
+                  if (err) throw err;
+                  console.log('Updated device current position : ');
+                  connection.end();
+                  return;
+                  }); 
+                });
+                console.log("Device added successfully " , device);
+                
             });
           } else {
             console.log("Device already exists so Updating location: 2 ", results1[0]);
@@ -272,7 +276,6 @@ function handleDeviceConnected (message) {
               connection.query(deleteQuery, function (err, result) {
                 if (err) throw err;
               });
-
               
               //inserting the current position of the device
               var insertQuery ='INSERT INTO iot.userpresence (user_id,device_id,Created_By,Created_Date,End_Date,xcoordinate,ycoordinate,userlocation) '
@@ -281,6 +284,8 @@ function handleDeviceConnected (message) {
               connection.query(insertQuery, function (err, result) {
                 if (err) throw err;
                 console.log('Updated device status presence : ');
+                connection.end();
+                return;
               });   
               
             });
@@ -310,23 +315,9 @@ function handleDeviceConnected (message) {
           connection.query(insertQuery, function (err, result) {
             if (err) throw err;
             console.log('Updated device status presence : ');
+            connection.end();
           });   
-      }
-      console.log("Devce : ",device);
-      // if(device == null){
-      //   return;
-      // }
-      var location = deviceInfo.user_Name;
-      // let deviceId = device.device_id;
-
-      console.log("Location : ",location);
-      // //make the device status online
-      // connection.query('UPDATE iot.device SET device_Location="'+location+'", xcoordinate='+xcoordinate+', ycoordinate='+ycoordinate+', status = 1 WHERE device_Address = "'+ mac_address+'"', function (err, result) {
-      //   if (err) throw err;
-      //   console.log("Update device status Result: " + result);
-      // });
-
-         
+      }  
     });
   });
   connected = (message.toString() === 'true')
