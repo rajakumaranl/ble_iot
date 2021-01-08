@@ -22,9 +22,9 @@
               </button>
           </div>
             <div class="col-md-3">
-                <button mat-stroked-button color="primary" class="card" (click)="gotoUserStatus()">
+                <!-- <button mat-stroked-button color="primary" class="card" (click)="gotoUserStatus()">
                     <span><b>View Map</b></span>
-                </button>
+                </button> -->
             </div>
         </div>
     <!-- </div> -->
@@ -75,7 +75,7 @@
                   <th mat-header-cell *matHeaderCellDef> Action</th>
                   <td mat-cell *matCellDef="let element; let i = index;">
                     <!-- <span class="material-icons"> Edit </span> -->
-                    <mat-icon aria-hidden="false" aria-label="Example edit icon" (click)="editDevice(element)">edit</mat-icon>
+                    <mat-icon aria-hidden="false" aria-label="Example map icon" (click)="editDevice(element)">map</mat-icon>
                     
                   </td>
                 </ng-container>
