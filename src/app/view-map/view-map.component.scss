@@ -3,13 +3,13 @@ p {
   }
   
   canvas {
-    border: 2px solid rgba(0,0,0,0.12);
+    // border: 2px solid rgba(0,0,0,0.12);
     transition: 300ms;
     border-radius: 4px;
   }
   
   canvas:hover {
-    border: 2px solid rgba(0,0,0,0.54);
+    border: none;
   }
 
 
@@ -274,6 +274,17 @@ p {
 }
 
 .circle-container {
-  width: 1px;
+  // width: 1px;
   position: relative;
+}
+
+.w-100 {
+  width: 100% !important;
+}
+.t-c {
+  text-align: center;
+}
+.his-div {
+  max-height: 470px;
+  overflow: scroll;
 }

@@ -15,7 +15,7 @@ export class BLEDashboardComponent implements OnInit {
   allDevices: any[] = [];
   editForm: FormGroup;
   showAddDevice: boolean;
-  displayedColumns = ['device_name', 'uuid', 'mac', 'location', 'status', 'action'];
+  displayedColumns = ['device_name', 'uuid', 'mac', 'location', 'type', 'status', 'action'];
   dataSource : MatTableDataSource<any> = new MatTableDataSource();
   hasData: boolean;
   constructor(private bleDashboardService: BLEDasboardService,

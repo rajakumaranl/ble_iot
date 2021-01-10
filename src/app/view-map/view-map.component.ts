@@ -73,14 +73,14 @@ export class ViewMapComponent implements OnInit {
     this.drawBuildingMap();
       // TODO: fetch the details auto refresh
 	this.checkUserPosition();
-	this.getLocationHistory();
+	// this.getLocationHistory();
     this.startAutoReferesh();
   }
 
   startAutoReferesh() {
       this.updateSubscription = interval(30000).subscribe(val => {
 		this.checkUserPosition();
-		this.getLocationHistory();
+		// this.getLocationHistory();
       });
   }
 
@@ -115,23 +115,22 @@ checkUserPosition() {
 
     // this.context.fillText("@realappie", x, y);
 
-		this.viewmapService.getPosition(this.mac_address).subscribe(
+	this.viewmapService.getPosition(this.mac_address).subscribe(
       (data) => {
-				// responseJson.forEach(position, (key, value) {
-          console.log("DATA ",data[0]);
-          if(data.length == 0){
-            return;
-          }
-          let position = data[0];
-					x = position.xcoordinate;
-					y = position.ycoordinate;
+		// responseJson.forEach(position, (key, value) {
+		console.log("DATA ",data[0]);
+		if(data.length == 0){
+		return;
+		}
+		let position = data[0];
+				x = position.xcoordinate;
+				y = position.ycoordinate;
         // });
         console.log("inside fn X = "+x+" Y = "+y)
-        this.positionUser(x, y);
-        // this.drawBuildingMap();
-			}	
-		);
-		
+		this.positionUser(x, y);
+		this.getLocationHistory();
+		}	
+	);
   }
 
   getLocationHistory(){
@@ -140,7 +139,9 @@ checkUserPosition() {
 		(data) => {
 			this.history = data;
 			if(data.length > 0){
-				this.hasData =true;
+				this.hasData = true;
+			} else {
+				this.hasData = false;
 			}
 		  	console.log("History : ", data);
 		}	
