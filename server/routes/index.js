@@ -21,7 +21,7 @@ router.get('/available-devices', function(req, res, next) {
   const con = mysql.createPool({
     host: 'localhost',
     user: 'root',
-    password: 'abcd',
+    password: 'root@123',
     database: 'iot',
   });
 
@@ -48,7 +48,7 @@ router.get('/device-position', function(req, res, next) {
   const con = mysql.createPool({
     host: 'localhost',
     user: 'root',
-    password: 'abcd',
+    password: 'root@123',
     database: 'iot',
   });
 
@@ -74,7 +74,7 @@ router.post('/add-device', function(req, res, next) {
   const con = mysql.createPool({
     host: 'localhost',
     user: 'root',
-    password: 'abcd',
+    password: 'root@123',
     database: 'iot',
   });
   var device = req.body.params;
@@ -106,7 +106,7 @@ router.post('/edit-device', function(req, res, next) {
   const con = mysql.createPool({
     host: 'localhost',
     user: 'root',
-    password: 'abcd',
+    password: 'root@123',
     database: 'iot',
   });
   var device = req.body.params;
@@ -138,7 +138,7 @@ router.delete('/remove-devices', function(req, res, next) {
   const con = mysql.createPool({
     host: 'localhost',
     user: 'root',
-    password: 'abcd',
+    password: 'root@123',
     database: 'iot',
   });
   // con.connect((err) => {
@@ -163,7 +163,7 @@ router.get('/device-position/history', function(req, res, next) {
   const con = mysql.createPool({
     host: 'localhost',
     user: 'root',
-    password: 'abcd',
+    password: 'root@123',
     database: 'iot',
   });
 
@@ -173,7 +173,8 @@ router.get('/device-position/history', function(req, res, next) {
   //     return;
   //   }
     
-    con.query('SELECT * from iot.userpresence join iot.device on device.device_id = userpresence.device_id where device.device_Address = "'+mac_address+'" and userpresence.End_Date IS NOT NULL order by userPresence_id  DESC LIMIT  20;', function (err, result) {
+
+    con.query('SELECT p.userPresence_id, p.device_id, p.Created_Date, p.userlocation, d.device_name from iot.userpresence as p join iot.device as d on d.device_id = p.device_id where d.device_Address = "'+mac_address+'" and p.End_Date IS NOT NULL order by p.userPresence_id  DESC LIMIT  20;', function (err, result) {
       if (err)
         throw err;
       // console.log("History : ",result);

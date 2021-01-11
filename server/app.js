@@ -55,7 +55,7 @@ async function onAppStartUp() {
     const con = mysql.createPool({
       host: 'localhost',
       user: 'root',
-      password: 'abcd',
+      password: 'root@123',
       database: 'iot',
     });
 
@@ -213,7 +213,7 @@ function handleDeviceConnected (message) {
     host: 'localhost',
     user: 'root',
     database: 'iot',
-    password: 'abcd'
+    password: 'root@123'
   });
 
   var device = null;
@@ -234,7 +234,7 @@ function handleDeviceConnected (message) {
           if(uuid == ''){
             console.log(" UUID is empty so creating new device ", uuid == '');
             var insertDevice = 'INSERT INTO iot.device (device_UUID,device_name,device_Address,device_Location,Created_By,Created_Date,Modified_By,Modified_Date,End_Date,xcoordinate,ycoordinate,status, type) '
-            +'values ("'+uuid+'","'+deviceInfo.device_Name+'","'+deviceInfo.device_Address+'","'+deviceInfo.user_Name+'",1,"'+time+'", NULL,NULL,NULL,'+xcoordinate+','+ycoordinate+',1, "'+device_type+'")';
+            +'values ("'+uuid+'","'+deviceInfo.device_Name+'","'+deviceInfo.device_Address+'","'+deviceInfo.user_Name+'",1,"'+deviceInfo.location_Time+'", NULL,NULL,NULL,'+xcoordinate+','+ycoordinate+',1, "'+device_type+'")';
             
             connection.query(insertDevice, function (err, result) {
               if (err) {console.log("Error while insert ",err);}
@@ -248,7 +248,7 @@ function handleDeviceConnected (message) {
                 device = results[0];
                 //inserting the current position of the device
                 var insertQuery ='INSERT INTO iot.userpresence (user_id,device_id,Created_By,Created_Date,End_Date,xcoordinate,ycoordinate,userlocation) '
-                +'values (1,'+device.device_id+', 1 ,"' +time+'", NULL, '+ xcoordinate+', '+ ycoordinate+', "'+ location+'")';
+                +'values (1,'+device.device_id+', 1 ,"' +deviceInfo.location_Time+'", NULL, '+ xcoordinate+', '+ ycoordinate+', "'+ location+'")';
 
                 connection.query(insertQuery, function (err, result) {
                 if (err) throw err;
@@ -270,7 +270,7 @@ function handleDeviceConnected (message) {
                   console.log("not already exists with UUID also so creating new device ", uuid);
                   //if UUID is there
                   var insertDevice = 'INSERT INTO iot.device (device_UUID,device_name,device_Address,device_Location,Created_By,Created_Date,Modified_By,Modified_Date,End_Date,xcoordinate,ycoordinate,status, type) '
-                  +'values ("'+uuid+'","'+deviceInfo.device_Name+'","'+deviceInfo.device_Address+'","'+deviceInfo.user_Name+'",1,"'+time+'", NULL,NULL,NULL,'+xcoordinate+','+ycoordinate+',1, "'+device_type+'")';
+                  +'values ("'+uuid+'","'+deviceInfo.device_Name+'","'+deviceInfo.device_Address+'","'+deviceInfo.user_Name+'",1,"'+deviceInfo.location_Time+'", NULL,NULL,NULL,'+xcoordinate+','+ycoordinate+',1, "'+device_type+'")';
                   
                   connection.query(insertDevice, function (err, result) {
                     if (err) {console.log("Error while insert ",err);}
@@ -284,7 +284,7 @@ function handleDeviceConnected (message) {
                       device = results[0];
                       //inserting the current position of the device
                       var insertQuery ='INSERT INTO iot.userpresence (user_id,device_id,Created_By,Created_Date,End_Date,xcoordinate,ycoordinate,userlocation) '
-                      +'values (1,'+device.device_id+', 1 ,"' +time+'", NULL, '+ xcoordinate+', '+ ycoordinate+', "'+ location+'")';
+                      +'values (1,'+device.device_id+', 1 ,"' +deviceInfo.location_Time+'", NULL, '+ xcoordinate+', '+ ycoordinate+', "'+ location+'")';
     
                       connection.query(insertQuery, function (err, result) {
                       if (err) throw err;
@@ -297,8 +297,11 @@ function handleDeviceConnected (message) {
                 console.log("Device already exist with UUID so Updating location: 3 ", location);
                 device = results1[0];
                 
+                // let t = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+                // var time =  moment(t).format('YYYY-MM-DD hh:mm:ss');
+                
                 //make the old location false
-                var deleteQuery ='UPDATE iot.userpresence SET End_Date = "'+time+'" WHERE device_id='+device.device_id+' AND End_Date is NULL';
+                var deleteQuery ='UPDATE iot.userpresence SET End_Date = "'+t+'" WHERE device_id='+device.device_id+' AND End_Date is NULL';
                 connection.query(deleteQuery, function (err, result) {
                   if (err) throw err;
                   console.log("Made old location to end");
@@ -309,7 +312,7 @@ function handleDeviceConnected (message) {
                     console.log("Add new location : ",location);
                     //inserting the current position of the device
                     var insertQuery ='INSERT INTO iot.userpresence (user_id,device_id,Created_By,Created_Date,End_Date,xcoordinate,ycoordinate,userlocation) '
-                                  +'values (1,'+device.device_id+', 1 ,"' +time+'", NULL, '+ xcoordinate+', '+ ycoordinate+', "'+ location+'")';
+                                  +'values (1,'+device.device_id+', 1 ,"' +deviceInfo.location_Time+'", NULL, '+ xcoordinate+', '+ ycoordinate+', "'+ location+'")';
                     
                     connection.query(insertQuery, function (err, result) {
                       if (err) throw err;
@@ -329,7 +332,7 @@ function handleDeviceConnected (message) {
 
           console.log("Update device status Result asa : ");
             //make the old locaiton false
-          var deleteQuery ='UPDATE iot.userpresence SET End_Date = "'+time+'" WHERE device_id='+devicesId +' AND End_Date is NULL';
+          var deleteQuery ='UPDATE iot.userpresence SET End_Date = "'+deviceInfo.location_Time+'" WHERE device_id='+devicesId +' AND End_Date is NULL';
           connection.query(deleteQuery, function (err, result) {
             if (err) throw err;
 
@@ -338,7 +341,7 @@ function handleDeviceConnected (message) {
   
                 //inserting the current position of the device
                 var insertQuery ='INSERT INTO iot.userpresence (user_id,device_id,Created_By,Created_Date,End_Date,xcoordinate,ycoordinate,userlocation) '
-                +'values (1,'+devicesId+', 1 ,"' +time+'", NULL, '+ xcoordinate+', '+ ycoordinate+', "'+ location+'")';
+                +'values (1,'+devicesId+', 1 ,"' +deviceInfo.location_Time+'", NULL, '+ xcoordinate+', '+ ycoordinate+', "'+ location+'")';
   
                 connection.query(insertQuery, function (err, result) {
                 if (err) throw err;

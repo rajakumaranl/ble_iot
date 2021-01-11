@@ -20,7 +20,7 @@ router.get('/available-devices', function(req, res, next) {
   const con = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'abcd',
+    password: 'root@123',
     database: 'iot',
   });
 

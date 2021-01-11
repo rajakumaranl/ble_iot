@@ -55,7 +55,7 @@ async function onAppStartUp() {
     const con = mysql.createConnection({
       host: 'localhost',
       user: 'root',
-      password: 'abcd',
+      password: 'root@123',
       database: 'iot',
     });
 
@@ -158,7 +158,7 @@ function handleDeviceConnected (message) {
   const con = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'abcd',
+    password: 'root@123',
     database: 'iot',
   });
 
